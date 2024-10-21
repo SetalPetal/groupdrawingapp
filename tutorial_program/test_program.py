@@ -8,6 +8,11 @@ from file_manager import FileManager
 !!! This code was derived from a tutorial to make a paint program.
 Source: https://youtu.be/XNf8W0kf3XQ?si=m3HJQyuLGMEyd8WX
 !!! This code is not to be incorporated into our prject and is for research and testing only.
+
+Please note, if you get "ModuleNotFoundError" when trying to run the program,
+you will need to clone the github project (>gitcl) into a local folder on your computer
+and open the folder location in VS Code.
+IT TOOK ME HOURS TO FIGURE THAT OUT!!!
 """
 
 class FilenamePopup:
