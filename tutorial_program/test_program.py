@@ -1,21 +1,29 @@
 from tkinter import Tk, Frame, Button, Scale, Canvas, Label, StringVar, Entry, Toplevel, messagebox, filedialog
 from tkinter.colorchooser import askcolor
-from PIL import Image, ImageGrab
+from PIL import Image, ImageGrab # No longer using Pillow modules in this file.
 import os
 from file_manager import FileManager
 
 """
 !!! This code was derived from a tutorial to make a paint program.
 Source: https://youtu.be/XNf8W0kf3XQ?si=m3HJQyuLGMEyd8WX
-!!! This code is not to be incorporated into our prject and is for research and testing only.
+!!! This code is not to be incorporated into our project and is for research and testing only.
 
 Please note, if you get "ModuleNotFoundError" when trying to run the program,
-you will need to clone the github project (>gitcl) into a local folder on your computer
+you will need to clone the github project in VS Code into a local folder on your computer
 and open the folder location in VS Code.
 IT TOOK ME HOURS TO FIGURE THAT OUT!!!
+To clone the repository in VS Code, select 'View' > 'Command Palette' and enter 'gitcl'.
+For some reason, VS Code was having a path issue with the remote github server when Python was trying to locate local modules.
+
+For some reason, when trying to add commits from the clone I downloaded,
+VS Code prompted to set user.name and user.email with git.
+To do this, presuming you have installed git, open a terminal/command prompt on your computer and enter the following commands:
+    git config --global user.name "github username"
+    git config --global user.email johndoe@example.com
 """
 
-class FilenamePopup:
+class FilenamePopup: # This class is no longer used in this file.
     def __init__(self, master):
         top = self.top = Toplevel(master)
         self.lbl = Label(top, text='Choose a file name:')
