@@ -55,3 +55,13 @@ class FileManager:
         else:
             # Show message file was not saved.
             messagebox.showwarning('File Save', 'File not saved!')
+
+    def load_image(self, canvas):
+
+        image_file = filedialog.askopenfile(defaultextension='.png',
+                                            filetypes=[
+                                                ('Portable Network Graphic file', '.png'),
+                                                ('Joint Photographic Experts Group file', '.jpg'),
+                                                ('Joint Photographic Experts Group file', '.jpeg'),
+                                                ('Bitmap file', '.bmp')
+                                            ])

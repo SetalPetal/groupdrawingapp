@@ -70,11 +70,11 @@ class Paint(object):
         self.poly_button = Button(self.toolbar, text='Polygon', command=self.use_poly)
         self.poly_button.grid(row=1, column=1, sticky='ew')
 
-        self.black_button = Button(self.toolbar, text='', bg='black', activebackground='black')
-        self.black_button.grid(row=1, column=2, sticky='ew')
-
         self.clear_button = Button(self.toolbar, text='Clear', command=lambda: self.c.delete('all'))
-        self.clear_button.grid(row=1, column=3, sticky='ew')
+        self.clear_button.grid(row=1, column=2, sticky='ew')
+
+        self.load_button = Button(self.toolbar, text='Load', command=load_image)
+        self.load_button.grid(row=1, column=3, sticky='ew')
 
         self.save_button = Button(self.toolbar, text='Save', command=self.save_file)
         self.save_button.grid(row=1, column=4, sticky='ew')
@@ -217,6 +217,9 @@ class Paint(object):
 
     def save_file(self):
         self.file_manager.save_file(self, self.root, self.c)
+
+    def load_image(self):
+        print('Loading File...')
         
 
     
