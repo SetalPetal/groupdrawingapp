@@ -14,10 +14,10 @@ class Window:
 
         # Buttons
         save_button = Button(self.toolbar, text="Save", width=15, height=3)
-        save_button.grid(row=0, column=0, rowspan=2, sticky="ew", padx=5, pady=5)
+        save_button.grid(row=0, column=0, rowspan=2, sticky="ew", padx=5)
 
         load_button = Button(self.toolbar, text="Load", width=15, height=3)
-        load_button.grid(row=2, column=0, rowspan=2, sticky="ew", padx=5, pady=5)
+        load_button.grid(row=2, column=0, rowspan=2, sticky="ew", padx=5)
 
         draw_button = Button(self.toolbar, text="Draw")
         draw_button.grid(row=0, column=1, sticky="ew", padx=5, pady=5)
@@ -43,6 +43,9 @@ class Window:
         # Configure grid columns to expand evenly
         for i in range(8):
             self.toolbar.grid_columnconfigure(i, weight=1)
+
+        self.canvas = Canvas(self.root, bg='white')
+        self.canvas.place(x=0, y=150, width=1200, height=750)
 
 if __name__ == "__main__":
     root = Tk()
