@@ -1,4 +1,3 @@
-import tkinter as tk
 from tkinter import Tk, Frame, Button, Scale, Canvas, Label, StringVar, Entry, Toplevel, messagebox, filedialog
 from tkinter.colorchooser import askcolor
 
@@ -9,6 +8,6 @@ class Window:
         self.root.geometry("1200x900")
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = Tk()
     app = Window(root)
     root.mainloop()
