@@ -11,11 +11,13 @@ class Window:
         #Tool bar
         self.toolbar = Frame(self.root, bd=1, relief=tk.RAISED, bg='Grey')
 
-        #Buttons 
-        button = Button(self.toolbar, text=f"Save")
-        button.pack(side=tk.LEFT, padx=2, pady=2)
-
         self.toolbar.place(x=0, y=0, width=1200, height=150)
+
+        #Buttons 
+        save_button = Button(self.toolbar, text=f"Save")
+        save_button.pack(side=tk.LEFT, padx=2, pady=2)
+
+        
 
 if __name__ == "__main__":
     root = Tk()
