@@ -5,7 +5,7 @@ from tkinter.colorchooser import askcolor
 class Window:
     def __init__(self, root):
         self.root = root 
-        self.root.title("Drawing Application")
+        self.root.title("MEZ. Canvas")
         self.root.geometry("1200x900")
 
         # Tool bar
