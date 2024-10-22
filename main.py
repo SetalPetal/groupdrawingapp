@@ -8,38 +8,41 @@ class Window:
         self.root.title("Drawing Application")
         self.root.geometry("1200x900")
 
-        #Tool bar
+        # Tool bar
         self.toolbar = Frame(self.root, bd=1, relief=tk.RAISED, bg='Grey')
-
         self.toolbar.place(x=0, y=0, width=1200, height=150)
 
-        #Buttons 
-        save_button = Button(self.toolbar, text=f"Save")
-        save_button.place(x=0, y=0, width=100, height=75)
+        # Buttons
+        save_button = Button(self.toolbar, text="Save", width=15, height=3)
+        save_button.grid(row=0, column=0, rowspan=2, sticky="ew", padx=5, pady=5)
 
-        load_button = Button(self.toolbar, text=f"Load")
-        load_button.place(x=0, y=75, width=100, height=75)
+        load_button = Button(self.toolbar, text="Load", width=15, height=3)
+        load_button.grid(row=2, column=0, rowspan=2, sticky="ew", padx=5, pady=5)
 
-        draw_button = Button(self.toolbar, text=f"Draw")
-        draw_button.pack(side=tk.LEFT, padx=2, pady=2)
+        draw_button = Button(self.toolbar, text="Draw")
+        draw_button.grid(row=0, column=1, sticky="ew", padx=5, pady=5)
 
-        eraser_button = Button(self.toolbar, text=f"Eraser")
-        eraser_button.pack(side=tk.LEFT, padx=2, pady=2)
+        eraser_button = Button(self.toolbar, text="Eraser")
+        eraser_button.grid(row=0, column=2, sticky="ew", padx=5, pady=5)
 
-        color_button = Button(self.toolbar, text=f"Color")
-        color_button.pack(side=tk.LEFT, padx=2, pady=2)
+        color_button = Button(self.toolbar, text="Color")
+        color_button.grid(row=0, column=3, sticky="ew", padx=5, pady=5)
 
-        brushes_button = Button(self.toolbar, text=f"Brushes")
-        brushes_button.pack(side=tk.LEFT, padx=2, pady=2)
+        brushes_button = Button(self.toolbar, text="Brushes")
+        brushes_button.grid(row=0, column=4, sticky="ew", padx=5, pady=5)
 
-        shape_button = Button(self.toolbar, text=f"Shapes")
-        shape_button.pack(side=tk.LEFT, padx=2, pady=2)
+        shape_button = Button(self.toolbar, text="Shapes")
+        shape_button.grid(row=0, column=5, sticky="ew", padx=5, pady=5)
 
-        undo_button = Button(self.toolbar, text=f"Undo")
-        undo_button.pack(side=tk.LEFT, padx=2, pady=2)
+        undo_button = Button(self.toolbar, text="Undo")
+        undo_button.grid(row=0, column=6, sticky="ew", padx=5, pady=5)
 
-        redo_button = Button(self.toolbar, text=f"redo")
-        redo_button.pack(side=tk.LEFT, padx=2, pady=2)
+        redo_button = Button(self.toolbar, text="Redo")
+        redo_button.grid(row=0, column=7, sticky="ew", padx=5, pady=5)
+
+        # Configure grid columns to expand evenly
+        for i in range(8):
+            self.toolbar.grid_columnconfigure(i, weight=1)
 
 if __name__ == "__main__":
     root = Tk()
