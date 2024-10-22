@@ -44,6 +44,7 @@ class Window:
         for i in range(8):
             self.toolbar.grid_columnconfigure(i, weight=1)
 
+        # Canvas
         self.canvas = Canvas(self.root, bg='white')
         self.canvas.place(x=0, y=150, width=1200, height=750)
 
