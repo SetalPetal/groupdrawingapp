@@ -43,11 +43,12 @@ class Paint(object):
 
     def __init__(self):
         self.root = Tk()
+        self.root.geometry("1200x700")
 
         self.toolbar = Frame(self.root)
         self.toolbar.pack()
-        self.canvas_frame = Frame(self.root)
-        self.canvas_frame.pack()
+        # self.canvas_frame = Frame(self.root)
+        # self.canvas_frame.pack()
 
         self.pen_button = Button(self.toolbar, text='Pen', command=self.use_pen)
         self.pen_button.grid(row=0, column=0, sticky='ew')
@@ -73,13 +74,13 @@ class Paint(object):
         self.clear_button = Button(self.toolbar, text='Clear', command=lambda: self.c.delete('all'))
         self.clear_button.grid(row=1, column=2, sticky='ew')
 
-        self.load_button = Button(self.toolbar, text='Load', command=load_image)
+        self.load_button = Button(self.toolbar, text='Load', command=self.load_image)
         self.load_button.grid(row=1, column=3, sticky='ew')
 
         self.save_button = Button(self.toolbar, text='Save', command=self.save_file)
         self.save_button.grid(row=1, column=4, sticky='ew')
 
-        self.c = Canvas(self.canvas_frame, bg='white', width=600, height=600)
+        self.c = Canvas(self.root, bg='white', width=600, height=600)
         self.c.pack()
 
         self.var_status = StringVar(value='Selected: Pen')
@@ -105,7 +106,8 @@ class Paint(object):
         self.root.bind('<Escape>', self.line_reset)
         self.line_start = (None, None)
 
-        self.file_manager = FileManager
+        self.canvas_image = None
+        self.file_manager = FileManager()
 
     def use_pen(self):
         self.activate_button(self.pen_button)
@@ -216,10 +218,13 @@ class Paint(object):
     #     self.save_button['state'] = 'normal'
 
     def save_file(self):
-        self.file_manager.save_file(self, self.root, self.c)
+        self.file_manager.save_file(self.root, self.c)
 
     def load_image(self):
-        print('Loading File...')
+        print(f"Window Width: {self.root.winfo_width()}\n Window Height: {self.root.winfo_height()}")
+        self.canvas_image = self.file_manager.load_image(self.c)
+        self.c.create_image(0, 0, anchor='nw', image=self.canvas_image)
+
         
 
     
