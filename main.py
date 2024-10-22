@@ -9,7 +9,7 @@ class Window:
         self.root.geometry("1200x900")
 
         #Tool bar
-        self.toolbar = Frame(self.root, bd=1)
+        self.toolbar = Frame(self.root, bd=1, relief=tk.RAISED, bg='Grey', height=600)
 
         #Buttons 
         button = Button(self.toolbar, text=f"Save")
