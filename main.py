@@ -9,13 +9,13 @@ class Window:
         self.root.geometry("1200x900")
 
         #Tool bar
-        self.toolbar = Frame(self.root, bd=1, relief=tk.RAISED, bg='Grey', height=600)
+        self.toolbar = Frame(self.root, bd=1, relief=tk.RAISED, bg='Grey')
 
         #Buttons 
         button = Button(self.toolbar, text=f"Save")
         button.pack(side=tk.LEFT, padx=2, pady=2)
 
-        self.toolbar.pack(side=tk.TOP, fill=tk.X)
+        self.toolbar.place(x=0, y=0, width=1200, height=150)
 
 if __name__ == "__main__":
     root = Tk()
