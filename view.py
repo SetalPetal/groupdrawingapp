@@ -44,9 +44,27 @@ class View():
         self.star_btn_imgs = self._get_button_images("star")
         self.line_horizontal_btn_imgs = self._get_button_images("line_horizontal")
         self.line_vertical_btn_imgs = self._get_button_images("line_vertical")
-        self.line_diaagonal_1_btn_imgs = self._get_button_images("line_diagonal_1")
-        self.line_diaagonal_2_btn_imgs = self._get_button_images("line_diagonal_2")
-        
+        self.line_diagonal_1_btn_imgs = self._get_button_images("line_diagonal_1")
+        self.line_diagonal_2_btn_imgs = self._get_button_images("line_diagonal_2")
+
+        # Shape button icons.
+        self.shape_icons_button = {
+            "square":self.square_btn_imgs,
+            "circle":self.circle_btn_imgs,
+            "triangle":self.triangle_btn_imgs,
+            "star":self.star_btn_imgs
+        }
+        # Static shape icons.
+        self.shape_icons_static =  {
+            "square":self.square_btn_imgs["active"],
+            "circle":self.circle_btn_imgs["active"],
+            "triangle":self.triangle_btn_imgs["active"],
+            "star":self.star_btn_imgs["active"],
+            "line 1":self.line_horizontal_btn_imgs["active"],
+            "line 2":self.line_vertical_btn_imgs["active"],
+            "line 3":self.line_diagonal_1_btn_imgs["active"],
+            "line 4":self.line_diagonal_2_btn_imgs["active"],
+        }       
 
         # Label images
         self._load_save_bg_img = self._get_component_img("load_save_frame_bg")
@@ -56,9 +74,11 @@ class View():
         self._draw_shape_bg_img = self._get_component_img("draw_shape_frame_bg")
         self._slider_bg_img = self._get_component_img("slider_frame_bg")
         self._size_input_output_bg_img = self._get_component_img("size_input_output_frame_bg")
-        self._size_label_bg_img = self._get_component_img("plain_square_btn_inactive")
+        self._size_label_bg_img = self._get_component_img("plain_square_btn_active")
         self._color_bg_img = self._get_component_img("color_frame_bg")
         self._color_label_bg_img = self._get_component_img("color_label_bg")
+        self.brush_style_label_img = self._get_component_img("brush_style_label_bg")
+        self.draw_shape_label_img = self._get_component_img("draw_shape_label_bg")
 
         
 
@@ -114,8 +134,8 @@ class View():
                                    compound="center",
                                    fg=Theme.BLACK,
                                    highlightthickness = 0, bd = 0)
-        self.save_button.place(x=Layout.load_save["BUTTON_PADDING"],
-                               y=Layout.load_save["BUTTON_PADDING"])
+        self.save_button.place(x=Layout.TOOLBAR_PADDING,
+                               y=Layout.TOOLBAR_PADDING)
     #-- LOAD BUTTON.
         self.load_button = ZButton(self.load_save_frame,
                                    self._load_btn_imgs,
@@ -123,8 +143,8 @@ class View():
                                    compound="center",
                                    fg=Theme.BLACK,
                                    highlightthickness = 0, bd = 0)
-        self.load_button.place(x=Layout.load_save["BUTTON_PADDING"],
-                               y=Layout.load_save["SECOND_ROW_Y"])
+        self.load_button.place(x=Layout.TOOLBAR_PADDING,
+                               y=Layout.TOOLBAR_SECOND_ROW_Y)
 
 #------ Set up draw frame and add to toolbar.
         self.draw_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
@@ -145,17 +165,16 @@ class View():
         self.pencil_button = ZButton(self.draw_frame,
                                    self._pencil_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0,
-                                   )
-        self.pencil_button.place(x=Layout.draw["BUTTON_PADDING"],
-                               y=Layout.draw["BUTTON_PADDING"])
+                                   highlightthickness = 0, bd = 0)
+        self.pencil_button.place(x=Layout.TOOLBAR_PADDING,
+                               y=Layout.TOOLBAR_PADDING)
     #-- PAINT BUTTON.
         self.paint_button = ZButton(self.draw_frame,
                                    self._paint_btn_imgs,
                                    fg=Theme.BLACK,
                                    highlightthickness = 0, bd = 0)
-        self.paint_button.place(x=Layout.draw["BUTTON_PADDING"],
-                               y=Layout.draw["SECOND_ROW_Y"])
+        self.paint_button.place(x=Layout.TOOLBAR_PADDING,
+                               y=Layout.TOOLBAR_SECOND_ROW_Y)
 
     #-- ERASER BUTTON.
         self.eraser_button = ZButton(self.draw_frame,
@@ -164,22 +183,22 @@ class View():
                                    highlightthickness = 0, bd = 0,
                                    command=self.use_eraser)
         self.eraser_button.place(x=Layout.draw["ERASER_BUTTON_X"],
-                               y=Layout.draw["SECOND_ROW_Y"])
+                               y=Layout.TOOLBAR_SECOND_ROW_Y)
         
-    #-- SHAPES BUTTON.    
-        self.shapes_button = ZButton(self.draw_frame, self._save_btn_imgs,
-                                     fg=Theme.BLACK, highlightthickness=0, 
-                                     bd=0, 
-                                     command=self.show_shapes_menu)
-        self.shapes_button.place()
+    # #-- SHAPES BUTTON.    
+    #     self.shapes_button = ZButton(self.draw_frame, self._save_btn_imgs,
+    #                                  fg=Theme.BLACK, highlightthickness=0, 
+    #                                  bd=0, 
+    #                                  command=self.show_shapes_menu)
+    #     self.shapes_button.place()
         # Slider background.
         self.slider_bg = tk.Label(self.draw_frame,
                                 image=self._slider_bg_img,
                                 bg=Theme.WHITE)
         self.slider_bg.place(x=Layout.draw["SLIDER_BG_X"],
-                               y=Layout.draw["BUTTON_PADDING"],
+                               y=Layout.TOOLBAR_PADDING,
                                 width=Layout.draw["SLIDER_BG_WIDTH"],
-                                height=Layout.DEFAULT_BUTTON_HEIGHT)
+                                height=Layout.DEFAULT_BUTTON_SIZE)
     #-- Size Slider.
         self.size_slider = tk.Scale(self.draw_frame, from_=0, to=200, showvalue=False,orient="horizontal")
         self.size_slider.place(x=Layout.draw["SIZE_SLIDER_X"],
@@ -192,9 +211,9 @@ class View():
                                 image=self._size_input_output_bg_img,
                                 bg=Theme.WHITE)
         self.size_bg.place(x=Layout.draw["SIZE_BG_X"],
-                           y=Layout.draw["SECOND_ROW_Y"],
+                           y=Layout.TOOLBAR_SECOND_ROW_Y,
                            width=Layout.draw["SIZE_BG_WIDTH"],
-                           height=Layout.DEFAULT_BUTTON_HEIGHT)
+                           height=Layout.DEFAULT_BUTTON_SIZE)
         # Size Label.
         self.size_label = tk.Label(self.draw_frame,
                                    text="Size",
@@ -202,9 +221,9 @@ class View():
                                    compound="center",
                                    bg=Theme.WHITE)
         self.size_label.place(x=Layout.draw["SIZE_BG_X"],
-                              y=Layout.draw["SECOND_ROW_Y"],
-                              width=Layout.DEFAULT_BUTTON_HEIGHT,
-                              height=Layout.DEFAULT_BUTTON_HEIGHT)
+                              y=Layout.TOOLBAR_SECOND_ROW_Y,
+                              width=Layout.DEFAULT_BUTTON_SIZE,
+                              height=Layout.DEFAULT_BUTTON_SIZE)
     #-- Size text input/output.
         self.size_input_output = tk.Text(self.draw_frame)
         self.size_input_output.place(x=Layout.draw["TEXT_BOX_X"],
@@ -234,7 +253,7 @@ class View():
                                     image=self._color_label_bg_img,
                                     compound="center",
                                     bg=Theme.BLACK)
-        self.color_label.place(x=Layout.MEDIUM_PADDING,
+        self.color_label.place(x=Layout.color["LABEL_X"],
                                y=Layout.DEFAULT_PADDING,
                                width=Layout.color["FRAME_WIDTH"],
                                height=Layout.color["LABEL_HEIGHT"])
@@ -244,8 +263,8 @@ class View():
                                        bg='red',
                                        fg=Theme.BLACK,
                                        highlightthickness = 0, bd = 0)
-        self.swatch_1_button.place(x=Layout.color["BUTTON_PADDING"],
-                                   y=Layout.color["SECOND_ROW_Y"])
+        self.swatch_1_button.place(x=Layout.TOOLBAR_PADDING,
+                                   y=Layout.TOOLBAR_SECOND_ROW_Y)
         #Add Swatch button 2.
         self.swatch_2_button = ZButton(self.color_frame,
                                    self.swatch_btn_imgs,
@@ -253,14 +272,14 @@ class View():
                                    bg='blue',
                                    highlightthickness = 0, bd = 0)
         self.swatch_2_button.place(x=Layout.color["SWATCH_2_X"],
-                               y=Layout.color["SECOND_ROW_Y"])
+                               y=Layout.TOOLBAR_SECOND_ROW_Y)
         # Add Color_picker button.
         self.color_picker_button = ZButton(self.color_frame,
                                    self.color_picker_btn_imgs,
                                    fg=Theme.BLACK,
                                    highlightthickness = 0, bd = 0)
         self.color_picker_button.place(x=Layout.color["PICKER_X"],
-                               y=Layout.color["SECOND_ROW_Y"])
+                               y=Layout.TOOLBAR_SECOND_ROW_Y)
         
 #------ Set up brush style frame and add to toolbar.
         self.brush_style_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
@@ -276,6 +295,37 @@ class View():
                                y=Layout.DEFAULT_PADDING,
                                width=Layout.brush_style["BG_WIDTH"],
                                height=Layout.brush_style["BG_HEIGHT"])
+        # Add brush style label.
+        self.brush_style_label = tk.Label(self.brush_style_frame,
+                                          text="Brush Style",
+                                          image=self.brush_style_label_img,
+                                          compound="center",
+                                          bg=Theme.BLACK)
+        self.brush_style_label.place(x=Layout.DEFAULT_PADDING,
+                                     y=Layout.DEFAULT_PADDING,
+                                     width=Layout.brush_style["LABEL_WIDTH"],
+                                     height=Layout.brush_style["LABEL_HEIGHT"])
+    #-- Add brush style icon.
+        self.brush_style_icon = tk.Label(self.brush_style_frame,
+                                         image=self.circle_btn_imgs["active"],
+                                         bg=Theme.LIGHT_GRAY)
+        self.brush_style_icon.place(x=Layout.brush_style["ICON_X"],
+                                    y=Layout.brush_style["ICON_Y"],
+                                    width=Layout.DEFAULT_BUTTON_SIZE,
+                                    height=Layout.DEFAULT_BUTTON_SIZE)
+    #-- Add brush style drop down menu.
+        self.brush_style_options = ["Circle", "Square", "Triangle", "Star",
+                                    "Line 1", "Line 2", "Line 3", "Line 4"]
+        self.brush_style_selection = tk.StringVar(self.root)
+        self.brush_style_selection.set(self.brush_style_options[0])
+        self.brush_style_menu = tk.OptionMenu(self.brush_style_frame,
+                                              self.brush_style_selection,
+                                              *self.brush_style_options,
+                                              command=self.update_brush_style)
+        self.brush_style_menu.place(x=Layout.TOOLBAR_PADDING,
+                                    y=Layout.TOOLBAR_SECOND_ROW_Y,
+                                    width=Layout.brush_style["DROPDOWN_WIDTH"],
+                                    height=Layout.brush_style["DROPDOWN_HEIGHT"])
 
 #------ Set up draw shape frame and add to toolbar.
         self.draw_shape_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
@@ -291,6 +341,38 @@ class View():
                                y=Layout.DEFAULT_PADDING,
                                width=Layout.draw_shape["BG_WIDTH"],
                                height=Layout.draw_shape["BG_HEIGHT"])
+        # Add draw shape label.
+        self.draw_shape_label = tk.Label(self.draw_shape_frame,
+                                    text="Draw Shape",
+                                    image=self.draw_shape_label_img,
+                                    compound="center",
+                                    bg=Theme.BLACK)
+        self.draw_shape_label.place(x=Layout.DEFAULT_PADDING,
+                                    y=Layout.DEFAULT_PADDING,
+                               width=Layout.draw_shape["LABEL_WIDTH"],
+                               height=Layout.draw_shape["LABEL_HEIGHT"])
+    #-- Add draw shape button.
+        self.draw_shape_button = ZButton(self.draw_shape_frame,
+                                   self.square_btn_imgs,
+                                   fg=Theme.BLACK,
+                                   highlightthickness = 0, bd = 0,
+                                   bg=Theme.LIGHT_GRAY)
+        self.draw_shape_button.place(x=Layout.draw_shape["BUTTON_X"],
+                                    y=Layout.draw_shape["BUTTON_Y"],
+                                    width=Layout.DEFAULT_BUTTON_SIZE,
+                                    height=Layout.DEFAULT_BUTTON_SIZE)
+    #-- Add brush style drop down menu.
+        self.draw_shape_options = ["Circle", "Square", "Triangle", "Star"]
+        self.draw_shape_selection = tk.StringVar(self.root)
+        self.draw_shape_selection.set(self.draw_shape_options[0])
+        self.draw_shape_menu = tk.OptionMenu(self.draw_shape_frame,
+                                              self.draw_shape_selection,
+                                              *self.draw_shape_options,
+                                              command=self.select_shape_to_draw)
+        self.draw_shape_menu.place(x=Layout.TOOLBAR_PADDING,
+                                    y=Layout.TOOLBAR_SECOND_ROW_Y,
+                                    width=Layout.draw_shape["DROPDOWN_WIDTH"],
+                                    height=Layout.draw_shape["DROPDOWN_HEIGHT"])
         
 #------ Set up undo_redo frame and add to toolbar.
         self.undo_redo_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
@@ -316,16 +398,16 @@ class View():
                                    highlightthickness = 0, bd = 0,
                                    command=self.undo_action)
             
-        self.undo_button.place(x=Layout.undo_redo["BUTTON_PADDING"],
-                               y=Layout.undo_redo["BUTTON_PADDING"])
+        self.undo_button.place(x=Layout.TOOLBAR_PADDING,
+                               y=Layout.TOOLBAR_PADDING)
         # Redo button.
         self.redo_button = ZButton(self.undo_redo_frame,
                                    self._redo_btn_imgs,
                                    fg=Theme.BLACK,
                                    highlightthickness = 0, bd = 0,
                                    command=self.redo_action)
-        self.redo_button.place(x=Layout.undo_redo["BUTTON_PADDING"],
-                               y=Layout.undo_redo["SECOND_ROW_Y"])
+        self.redo_button.place(x=Layout.TOOLBAR_PADDING,
+                               y=Layout.TOOLBAR_SECOND_ROW_Y)
 
         
 #------ Setup canvas and add to main window.
@@ -340,17 +422,18 @@ class View():
         self.draw_tool = DrawTool(self.canvas, self.undo_redo)
 
         #Fleshed out pencil button linked to draw_tool def
-        self.pencil_button = ZButton(
-            self.draw_frame,
-            self._pencil_btn_imgs,
-            fg=Theme.BLACK,
-            highlightthickness=0, 
-            bd=0,
-            command=self.draw_tool.activate)
+        self.pencil_button.config(command=self.draw_tool.activate)
+        # self.pencil_button = ZButton(
+        #     self.draw_frame,
+        #     self._pencil_btn_imgs,
+        #     fg=Theme.BLACK,
+        #     highlightthickness=0, 
+        #     bd=0,
+        #     command=self.draw_tool.activate)
 
 
-        self.pencil_button.place(x=Layout.draw["BUTTON_PADDING"],
-                                 y=Layout.draw["BUTTON_PADDING"])
+        # self.pencil_button.place(x=Layout.draw["TOOLBAR_PADDING"],
+        #                          y=Layout.draw["TOOLBAR_PADDING"])
         
         
 #------ Set up footer and add to main window.
@@ -365,7 +448,7 @@ class View():
         self.shape_tool = ShapeTool(self.root)
 
         #Initializing EraserTool
-        self.eraser_tool  = Eraser(self.root)
+        self.eraser_tool = Eraser(self.root)
 
         #Shapes Menu
         self.shapes_menu = tk.Menu(self.root, tearoff=0)
@@ -397,6 +480,12 @@ class View():
 
     def use_eraser(self):
         self.eraser_tool = Eraser(self.canvas)
+
+    def update_brush_style(self, selection):
+        self.brush_style_icon.config(image=self.shape_icons_static[selection.lower()])
+
+    def select_shape_to_draw(self, selection):
+        self.draw_shape_button.update_image_library(self.shape_icons_button[selection.lower()])
 
 
 if __name__ == "__main__":

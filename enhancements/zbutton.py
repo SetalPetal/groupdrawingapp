@@ -12,25 +12,31 @@ class ZButton(Button):
             # state can be either "inactive" or "active"
             self.state = "inactive"
             # Set button image to "inactive" image.
-            self['image'] = self.img_library["inactive"]
+            self['image'] = self.img_library[self.state]
             # bind events.
             self.bind('<Enter>', self.enter)
             self.bind('<Leave>', self.leave)
         
     def enter(self, event):
         # Change button to "hover" image and text colour to white.
-        self.config(image=self.img_library["hover"])
-        self.config(fg=Theme.WHITE)
+        if self.state != "active":
+            self.config(image=self.img_library["hover"])
+            self.config(fg=Theme.WHITE)
 
     def leave(self, event):
         # CHange button to back to current state and text color to black.
-        self.config(image=self.img_library[self.state])
-        self.config(fg=Theme.BLACK)
+        if self.state != "active":
+            self.config(image=self.img_library[self.state])
+            self.config(fg=Theme.BLACK)
 
     def update_state(self, state):
         # Raise error if invalid value is provided to change button state to.
-        if state != "inactive" or state != "active":
+        if state != "inactive" and state != "active":
             raise ValueError("Invalid value to change button state. State can only be a string: \"active\" or \"inactive\".")
         # Update state and button image.
         self.state = state
         self.config(image=self.img_library[self.state])
+
+    def update_image_library(self, image_library):
+         self.img_library = image_library
+         self.config(image=self.img_library[self.state])
