@@ -1,6 +1,7 @@
 import tkinter as tk
 from tools import FileManager
-from tools import draw_tool
+from tools import UndoRedo
+from tools import DrawTool
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
 from tools.shapes_tool import ShapesTool
@@ -55,6 +56,8 @@ class View():
 
         # Setup imported tools
         self.file_manager = FileManager()
+        self.undo_redo = UndoRedo()
+        self.action_history = []
 
         #Load image compoents.
         self._load_img_components()
@@ -252,39 +255,53 @@ class View():
                                 y=Layout.DEFAULT_PADDING,
                                 width=Layout.undo_redo["BG_WIDTH"],
                                 height=Layout.undo_redo["BG_HEIGHT"])        
-        # Set up undo and redo buttons using ZButton class - a modified tk.Button class.
+#-------Set up undo and redo buttons using ZButton class - a modified tk.Button class.
+
+    
+
         self.undo_button = ZButton(self.undo_redo_frame,
                                    self._undo_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   command=self.undo_action)
+            
         self.undo_button.place(x=Layout.undo_redo["BUTTON_PADDING"],
                                y=Layout.undo_redo["BUTTON_PADDING"])
         # Redo button.
         self.redo_button = ZButton(self.undo_redo_frame,
                                    self._redo_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   command=self.redo_action)
         self.redo_button.place(x=Layout.undo_redo["BUTTON_PADDING"],
                                y=Layout.undo_redo["SECOND_ROW_Y"])
 
         
 #------ Setup canvas and add to main window.
         self.canvas = tk.Canvas(self.root, bg=Theme.WHITE)
-        #self.canvas.grid(row=2, column=0, columnspan=6, sticky="n")
         self.canvas.place(x=Layout.canvas["X"],
                           y=Layout.canvas["Y"],
                           width=Layout.canvas["WIDTH"],
                           height=Layout.canvas["HEIGHT"])
+        self.canvas.old_x = None
+        self.canvas.old_y = None
+
+        self.draw_tool = DrawTool(self.canvas, self.undo_redo)
 
         #Fleshed out pencil button linked to draw_tool def
-        self.pencil_button = ZButton(self.draw_frame,
-                                     self._pencil_btn_imgs,
-                                     fg=Theme.BLACK,
-                                     highlightthickness=0, bd=0,
-                                     command=draw_tool(self.canvas))  
+        self.pencil_button = ZButton(
+            self.draw_frame,
+            self._pencil_btn_imgs,
+            fg=Theme.BLACK,
+            highlightthickness=0, 
+            bd=0,
+            command=self.draw_tool.activate)
+
 
         self.pencil_button.place(x=Layout.draw["BUTTON_PADDING"],
                                  y=Layout.draw["BUTTON_PADDING"])
+        
+        
 #------ Set up footer and add to main window.
         # Footer may be used in future development for app info and zoom in/out feature.
         self.footer = tk.Frame(self.root, bg=Theme.MID_GRAY)
@@ -293,10 +310,11 @@ class View():
                           width=Layout.footer["WIDTH"],
                           height=Layout.footer["HEIGHT"])
 
-        
-
-        
-
+    def undo_action(self):
+        self.undo_redo.undo(self.canvas)
+    
+    def redo_action(self):
+        self.undo_redo.redo(self.canvas)
 
 
 
