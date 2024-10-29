@@ -34,6 +34,8 @@ class View():
         self._pencil_btn_imgs = self._get_button_images("pencil")
         self._paint_btn_imgs = self._get_button_images("paint")
         self._eraser_btn_imgs = self._get_button_images("eraser")
+        self.swatch_btn_imgs = self._get_button_images("color_select")
+        self.color_picker_btn_imgs = self._get_button_images("color_picker")
         self._undo_btn_imgs = self._get_button_images("undo")
         self._redo_btn_imgs = self._get_button_images("redo")
         self.square_btn_imgs = self._get_button_images("square")
@@ -231,10 +233,31 @@ class View():
                                     image=self._color_label_bg_img,
                                     compound="center",
                                     bg=Theme.BLACK)
-        self.color_label.place(x=Layout.color["LABEL_X"],
+        self.color_label.place(x=Layout.MEDIUM_PADDING,
                                y=Layout.DEFAULT_PADDING,
                                width=Layout.color["FRAME_WIDTH"],
                                height=Layout.color["LABEL_HEIGHT"])
+        # Add Swatch button 1.
+        self.swatch_1_button = ZButton(self.color_frame,
+                                   self.swatch_btn_imgs,
+                                   fg=Theme.BLACK,
+                                   highlightthickness = 0, bd = 0)
+        self.swatch_1_button.place(x=Layout.color["BUTTON_PADDING"],
+                               y=Layout.color["SECOND_ROW_Y"])
+        #Add Swatch button 2.
+        self.swatch_2_button = ZButton(self.color_frame,
+                                   self.swatch_btn_imgs,
+                                   fg=Theme.BLACK,
+                                   highlightthickness = 0, bd = 0)
+        self.swatch_2_button.place(x=Layout.color["SWATCH_2_X"],
+                               y=Layout.color["SECOND_ROW_Y"])
+        # Add Color_picker button.
+        self.color_picker_button = ZButton(self.color_frame,
+                                   self.color_picker_btn_imgs,
+                                   fg=Theme.BLACK,
+                                   highlightthickness = 0, bd = 0)
+        self.color_picker_button.place(x=Layout.color["PICKER_X"],
+                               y=Layout.color["SECOND_ROW_Y"])
         
 #------ Set up brush style frame and add to toolbar.
         self.brush_style_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
