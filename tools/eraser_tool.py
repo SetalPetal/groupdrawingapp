@@ -1,4 +1,4 @@
-import tkinter as tk 
+import tkinter as tk
 
 class Eraser:
     def __init__(self, canvas):
@@ -7,7 +7,7 @@ class Eraser:
         self.old_y = None
         self.eraser_size = 10
 
-        #Mouse bindings 
+        # Mouse bindings
         self.canvas.bind('<B1-Motion>', self.erase)
         self.canvas.bind('<ButtonRelease-1>', self.reset)
 
@@ -16,9 +16,9 @@ class Eraser:
 
     def erase(self, event):
         if self.old_x and self.old_y:
-            self.canvas.create_line(self.old_x, self.old_y, event.x, event.y,
-                                    width=self.eraser_size, fill='white',
-                                    capstyle=tk.ROUND, smooth=tk.TRUE, splinesteps=36)
+            x1, y1 = (event.x - self.eraser_size), (event.y - self.eraser_size)
+            x2, y2 = (event.x + self.eraser_size), (event.y + self.eraser_size)
+            self.canvas.create_rectangle(x1, y1, x2, y2, fill='white', outline='white')
         self.old_x = event.x
         self.old_y = event.y
 
