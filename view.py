@@ -1,6 +1,7 @@
 import tkinter as tk
 from tools import FileManager
-from tools import draw_tool
+from tools import UndoRedo
+from tools import DrawTool
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
 from tools.shapes_tool import ShapeTool
@@ -46,7 +47,7 @@ class View():
         self._slider_bg_img = self._get_component_img("slider_frame_bg")
         self._size_input_output_bg_img = self._get_component_img("size_input_output_frame_bg")
         self._size_label_bg_img = self._get_component_img("plain_square_btn_inactive")
-        self._color_label_bg_img = self._get_component_img("color_label_bg")
+
         
 
         
@@ -55,6 +56,8 @@ class View():
 
         # Setup imported tools
         self.file_manager = FileManager()
+        self.undo_redo = UndoRedo()
+        self.action_history = []
 
         #Load image compoents.
         self._load_img_components()
@@ -148,6 +151,13 @@ class View():
                                    highlightthickness = 0, bd = 0)
         self.eraser_button.place(x=Layout.draw["ERASER_BUTTON_X"],
                                y=Layout.draw["SECOND_ROW_Y"])
+        
+    #-- SHAPES BUTTON.    
+        self.shapes_button = ZButton(self.draw_frame, self._save_btn_imgs,
+                                     fg=Theme.BLACK, highlightthickness=0, 
+                                     bd=0, 
+                                     command=self.show_shapes_menu)
+        self.shapes_button.place()
         # Slider background.
         self.slider_bg = tk.Label(self.draw_frame,
                                 image=self._slider_bg_img,
@@ -258,39 +268,53 @@ class View():
                                 y=Layout.DEFAULT_PADDING,
                                 width=Layout.undo_redo["BG_WIDTH"],
                                 height=Layout.undo_redo["BG_HEIGHT"])        
-        # Set up undo and redo buttons using ZButton class - a modified tk.Button class.
+#-------Set up undo and redo buttons using ZButton class - a modified tk.Button class.
+
+    
+
         self.undo_button = ZButton(self.undo_redo_frame,
                                    self._undo_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   command=self.undo_action)
+            
         self.undo_button.place(x=Layout.undo_redo["BUTTON_PADDING"],
                                y=Layout.undo_redo["BUTTON_PADDING"])
         # Redo button.
         self.redo_button = ZButton(self.undo_redo_frame,
                                    self._redo_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   command=self.redo_action)
         self.redo_button.place(x=Layout.undo_redo["BUTTON_PADDING"],
                                y=Layout.undo_redo["SECOND_ROW_Y"])
 
         
 #------ Setup canvas and add to main window.
         self.canvas = tk.Canvas(self.root, bg=Theme.WHITE)
-        #self.canvas.grid(row=2, column=0, columnspan=6, sticky="n")
         self.canvas.place(x=Layout.canvas["X"],
                           y=Layout.canvas["Y"],
                           width=Layout.canvas["WIDTH"],
                           height=Layout.canvas["HEIGHT"])
+        self.canvas.old_x = None
+        self.canvas.old_y = None
+
+        self.draw_tool = DrawTool(self.canvas, self.undo_redo)
 
         #Fleshed out pencil button linked to draw_tool def
-        self.pencil_button = ZButton(self.draw_frame,
-                                     self._pencil_btn_imgs,
-                                     fg=Theme.BLACK,
-                                     highlightthickness=0, bd=0,
-                                     command=draw_tool(self.canvas))  
+        self.pencil_button = ZButton(
+            self.draw_frame,
+            self._pencil_btn_imgs,
+            fg=Theme.BLACK,
+            highlightthickness=0, 
+            bd=0,
+            command=self.draw_tool.activate)
+
 
         self.pencil_button.place(x=Layout.draw["BUTTON_PADDING"],
                                  y=Layout.draw["BUTTON_PADDING"])
+        
+        
 #------ Set up footer and add to main window.
         # Footer may be used in future development for app info and zoom in/out feature.
         self.footer = tk.Frame(self.root, bg=Theme.MID_GRAY)
@@ -299,13 +323,36 @@ class View():
                           width=Layout.footer["WIDTH"],
                           height=Layout.footer["HEIGHT"])
 
+        #Initializing ShapeTool
+        self.shape_tool = ShapeTool(self.root)
+
+        #Shapes Menu
+        self.shapes_menu = tk.Menu(self.root, tearoff=0)
+        self.shapes_menu.add_command(label="Rectangle", command=self.use_rectangle)
+        self.shapes_menu.add_command(label="Square", command=self.use_square)
+        self.shapes_menu.add_command(label="Circle", command=self.use_circle)
+        self.shapes_menu.add_command(label="Triangle", command=self.use_triangle)
+
+    def show_shapes_menu(self, event=None):
+        self.shapes_menu.post(self.root.winfo_pointerx(), self.root.winfo_pointery())
         
+    def use_rectangle(self):
+        self.shape_tool.rectangle()
 
-        
+    def use_square(self):
+        self.shape_tool.square()
+    def undo_action(self):
+        self.undo_redo.undo(self.canvas)
+    
+    def redo_action(self):
+        self.undo_redo.redo(self.canvas)
 
 
+    def use_circle(self):
+        self.shape_tool.circle()
 
-
+    def use_triangle(self):
+        self.shape_tool.triangle()
 
 
 if __name__ == "__main__":
