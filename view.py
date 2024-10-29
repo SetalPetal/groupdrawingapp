@@ -246,17 +246,11 @@ class View():
                                        highlightthickness = 0, bd = 0)
         self.swatch_1_button.place(x=Layout.color["BUTTON_PADDING"],
                                    y=Layout.color["SECOND_ROW_Y"])
-        # Add Swatch 1 color label.
-        # self.swatch_1_color_label = tk.Label(self.color_frame,
-        #                                      bg="blue")
-        # self.swatch_1_color_label.place(x=Layout.color["SWATCH_1_COLOR_X"],
-        #                                 y=Layout.color["SWATCH_COLOR_Y"],
-        #                                 width=Layout.color["SWATCH_COLOR_SIZE"],
-        #                                 height=Layout.color["SWATCH_COLOR_SIZE"])
         #Add Swatch button 2.
         self.swatch_2_button = ZButton(self.color_frame,
                                    self.swatch_btn_imgs,
                                    fg=Theme.BLACK,
+                                   bg='blue',
                                    highlightthickness = 0, bd = 0)
         self.swatch_2_button.place(x=Layout.color["SWATCH_2_X"],
                                y=Layout.color["SECOND_ROW_Y"])
