@@ -78,6 +78,8 @@ class View():
         self.root.iconbitmap("data/ui_components/app_icon.ico")
         self.root.geometry(Layout.root["SIZE"])
         self.root.configure(background="black")
+        self.root.wm_attributes("-transparentcolor", 'grey')
+
 
 #------ Setup toolbar frame and add to main window.
         self.toolbar = tk.Frame(self.root,
@@ -228,9 +230,10 @@ class View():
         self.color_label = tk.Label(self.color_frame,
                                     text="color",
                                     image=self._color_label_bg_img,
-                                    compound="center")
-        self.color_label.place(x=Layout.color["X"],
-                               y=Layout.color["Y"],
+                                    compound="center",
+                                    bg=Theme.BLACK)
+        self.color_label.place(x=Layout.color["LABEL_X"],
+                               y=Layout.DEFAULT_PADDING,
                                width=Layout.color["FRAME_WIDTH"],
                                height=Layout.color["LABEL_HEIGHT"])
         
