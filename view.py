@@ -55,6 +55,7 @@ class View():
         self._slider_bg_img = self._get_component_img("slider_frame_bg")
         self._size_input_output_bg_img = self._get_component_img("size_input_output_frame_bg")
         self._size_label_bg_img = self._get_component_img("plain_square_btn_inactive")
+        self._color_bg_img = self._get_component_img("color_frame_bg")
         self._color_label_bg_img = self._get_component_img("color_label_bg")
 
         
