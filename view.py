@@ -78,7 +78,6 @@ class View():
         self.root.iconbitmap("data/ui_components/app_icon.ico")
         self.root.geometry(Layout.root["SIZE"])
         self.root.configure(background="black")
-        self.root.wm_attributes("-transparentcolor", 'grey')
 
 
 #------ Setup toolbar frame and add to main window.
