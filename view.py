@@ -3,6 +3,7 @@ from tools import FileManager
 from tools import draw_tool
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
+from tools.shapes_tool import ShapesTool
 
 
 class View():
