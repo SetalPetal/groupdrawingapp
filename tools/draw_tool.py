@@ -48,3 +48,5 @@ class DrawTool:
         self.undo_redo.end_group()
         self.canvas.old_x = None
         self.canvas.old_y = None
+
+   
