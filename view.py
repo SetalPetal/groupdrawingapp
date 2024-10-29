@@ -159,7 +159,8 @@ class View():
         self.eraser_button = ZButton(self.draw_frame,
                                    self._eraser_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   command=self.use_eraser)
         self.eraser_button.place(x=Layout.draw["ERASER_BUTTON_X"],
                                y=Layout.draw["SECOND_ROW_Y"])
         
@@ -338,6 +339,9 @@ class View():
         #Initializing ShapeTool
         self.shape_tool = ShapeTool(self.root)
 
+        #Initializing EraserTool
+        self.eraser_tool  = Eraser(self.root)
+
         #Shapes Menu
         self.shapes_menu = tk.Menu(self.root, tearoff=0)
         self.shapes_menu.add_command(label="Rectangle", command=self.use_rectangle)
@@ -365,6 +369,9 @@ class View():
     
     def redo_action(self):
         self.undo_redo.redo(self.canvas)
+
+    def use_eraser(self):
+        self.eraser_tool = Eraser(self.canvas)
 
 
 if __name__ == "__main__":

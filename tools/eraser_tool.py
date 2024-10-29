@@ -8,7 +8,7 @@ class Eraser:
         self.eraser_size = 10
 
         #Mouse bindings 
-        self.canvas.bind('<B1-motion>', self.erase)
+        self.canvas.bind('<B1-Motion>', self.erase)
         self.canvas.bind('<ButtonRelease-1>', self.reset)
 
     def set_eraser_size(self, size):
