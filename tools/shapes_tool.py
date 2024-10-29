@@ -18,7 +18,7 @@ class ShapeTool:
     def rectangle(self):
         self.shape = 'rectangle'
 
-    def Exlipse(self):
+    def eclipse(self):
         self.shape = 'eclipse'
 
     def star(self):
