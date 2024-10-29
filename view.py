@@ -342,8 +342,8 @@ class View():
         #Shapes Menu
         self.shapes_menu = tk.Menu(self.root, tearoff=0)
         self.shapes_menu.add_command(label="Rectangle", command=self.use_rectangle)
-        self.shapes_menu.add_command(label="Square", command=self.use_square)
-        self.shapes_menu.add_command(label="Circle", command=self.use_circle)
+        self.shapes_menu.add_command(label="Eclipse", command=self.use_eclipse)
+        self.shapes_menu.add_command(label="Star", command=self.use_star)
         self.shapes_menu.add_command(label="Triangle", command=self.use_triangle)
 
     def show_shapes_menu(self, event=None):
@@ -352,20 +352,20 @@ class View():
     def use_rectangle(self):
         self.shape_tool.rectangle()
 
-    def use_square(self):
-        self.shape_tool.square()
+    def use_eclipse(self):
+        self.shape_tool.eclipse()
+
+    def use_star(self):
+        self.shape_tool.star()
+
+    def use_triangle(self):
+        self.shape_tool.triangle()
+
     def undo_action(self):
         self.undo_redo.undo(self.canvas)
     
     def redo_action(self):
         self.undo_redo.redo(self.canvas)
-
-
-    def use_circle(self):
-        self.shape_tool.circle()
-
-    def use_triangle(self):
-        self.shape_tool.triangle()
 
 
 if __name__ == "__main__":
