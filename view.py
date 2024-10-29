@@ -36,6 +36,15 @@ class View():
         self._eraser_btn_imgs = self._get_button_images("eraser")
         self._undo_btn_imgs = self._get_button_images("undo")
         self._redo_btn_imgs = self._get_button_images("redo")
+        self.square_btn_imgs = self._get_button_images("square")
+        self.triangle_btn_imgs = self._get_button_images("triangle")
+        self.circle_btn_imgs = self._get_button_images("circle")
+        self.star_btn_imgs = self._get_button_images("star")
+        self.line_horizontal_btn_imgs = self._get_button_images("line_horizontal")
+        self.line_vertical_btn_imgs = self._get_button_images("line_vertical")
+        self.line_diaagonal_1_btn_imgs = self._get_button_images("line_diagonal_1")
+        self.line_diaagonal_2_btn_imgs = self._get_button_images("line_diagonal_2")
+        
 
         # Label images
         self._load_save_bg_img = self._get_component_img("load_save_frame_bg")
@@ -47,6 +56,7 @@ class View():
         self._slider_bg_img = self._get_component_img("slider_frame_bg")
         self._size_input_output_bg_img = self._get_component_img("size_input_output_frame_bg")
         self._size_label_bg_img = self._get_component_img("plain_square_btn_inactive")
+        self._color_label_bg_img = self._get_component_img("color_label_bg")
 
         
 
