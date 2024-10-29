@@ -314,7 +314,6 @@ class View():
                           width=Layout.footer["WIDTH"],
                           height=Layout.footer["HEIGHT"])
 
-<<<<<<< HEAD
         #Initializing ShapeTool
         self.shape_tool = ShapeTool(self.root)
 
@@ -333,14 +332,12 @@ class View():
 
     def use_square(self):
         self.shape_tool.square()
-=======
     def undo_action(self):
         self.undo_redo.undo(self.canvas)
     
     def redo_action(self):
         self.undo_redo.redo(self.canvas)
 
->>>>>>> 3b8dd806eb2dc5d501c2761e1cb39836b29b2d3c
 
     def use_circle(self):
         self.shape_tool.circle()
