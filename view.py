@@ -5,7 +5,7 @@ from tools import DrawTool
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
 from tools.shapes_tool import ShapeTool
-
+from tools.eraser_tool import Eraser
 
 class View():
 
