@@ -1,7 +1,9 @@
 import tkinter as tk
 from tools import FileManager
+from tools import draw_tool
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
+
 
 class View():
 
@@ -126,7 +128,8 @@ class View():
         self.pencil_button = ZButton(self.draw_frame,
                                    self._pencil_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   )
         self.pencil_button.place(x=Layout.draw["BUTTON_PADDING"],
                                y=Layout.draw["BUTTON_PADDING"])
     #-- PAINT BUTTON.
@@ -272,6 +275,15 @@ class View():
                           width=Layout.canvas["WIDTH"],
                           height=Layout.canvas["HEIGHT"])
 
+        #Fleshed out pencil button linked to draw_tool def
+        self.pencil_button = ZButton(self.draw_frame,
+                                     self._pencil_btn_imgs,
+                                     fg=Theme.BLACK,
+                                     highlightthickness=0, bd=0,
+                                     command=draw_tool(self.canvas))  
+
+        self.pencil_button.place(x=Layout.draw["BUTTON_PADDING"],
+                                 y=Layout.draw["BUTTON_PADDING"])
 #------ Set up footer and add to main window.
         # Footer may be used in future development for app info and zoom in/out feature.
         self.footer = tk.Frame(self.root, bg=Theme.MID_GRAY)
