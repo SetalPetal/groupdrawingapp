@@ -50,7 +50,6 @@ class View():
         self._load_save_bg_img = self._get_component_img("load_save_frame_bg")
         self._undo_redo_bg_img = self._get_component_img("undo_redo_frame_bg")
         self._draw_bg_img = self._get_component_img("draw_frame_bg")
-        self._color_bg_img = self._get_component_img("color_frame_bg")
         self._brush_style_bg_img = self._get_component_img("brush_style_frame_bg")
         self._draw_shape_bg_img = self._get_component_img("draw_shape_frame_bg")
         self._slider_bg_img = self._get_component_img("slider_frame_bg")
