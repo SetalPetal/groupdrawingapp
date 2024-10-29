@@ -3,7 +3,7 @@ from tools import FileManager
 from tools import draw_tool
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
-from tools.shapes_tool import ShapesTool
+from tools.shapes_tool import ShapeTool
 
 
 class View():
@@ -47,10 +47,7 @@ class View():
         self._size_input_output_bg_img = self._get_component_img("size_input_output_frame_bg")
         self._size_label_bg_img = self._get_component_img("plain_square_btn_inactive")
 
-        
-
-        
-
+    
     def __init__(self, root):
 
         # Setup imported tools
@@ -148,6 +145,13 @@ class View():
                                    highlightthickness = 0, bd = 0)
         self.eraser_button.place(x=Layout.draw["ERASER_BUTTON_X"],
                                y=Layout.draw["SECOND_ROW_Y"])
+        
+    #-- SHAPES BUTTON.    
+        self.shapes_button = ZButton(self.draw_frame, self._save_btn_imgs,
+                                     fg=Theme.BLACK, highlightthickness=0, 
+                                     bd=0, 
+                                     command=self.show_shapes_menu)
+        self.shapes_button.place()
         # Slider background.
         self.slider_bg = tk.Label(self.draw_frame,
                                 image=self._slider_bg_img,
@@ -293,13 +297,30 @@ class View():
                           width=Layout.footer["WIDTH"],
                           height=Layout.footer["HEIGHT"])
 
+        #Initializing ShapeTool
+        self.shape_tool = ShapeTool(self.root)
+
+        #Shapes Menu
+        self.shapes_menu = tk.Menu(self.root, tearoff=0)
+        self.shapes_menu.add_command(label="Rectangle", command=self.use_rectangle)
+        self.shapes_menu.add_command(label="Square", command=self.use_square)
+        self.shapes_menu.add_command(label="Circle", command=self.use_circle)
+        self.shapes_menu.add_command(label="Triangle", command=self.use_triangle)
+
+    def show_shapes_menu(self, event=None):
+        self.shapes_menu.post(self.root.winfo_pointerx(), self.root.winfo_pointery())
         
+    def use_rectangle(self):
+        self.shape_tool.rectangle()
 
-        
+    def use_square(self):
+        self.shape_tool.square()
 
+    def use_circle(self):
+        self.shape_tool.circle()
 
-
-
+    def use_triangle(self):
+        self.shape_tool.triangle()
 
 
 if __name__ == "__main__":
