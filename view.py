@@ -361,10 +361,10 @@ class View():
                                     y=Layout.draw_shape["BUTTON_Y"],
                                     width=Layout.DEFAULT_BUTTON_SIZE,
                                     height=Layout.DEFAULT_BUTTON_SIZE)
-    #-- Add brush style drop down menu.
+    #-- Add draw shape drop down menu.
         self.draw_shape_options = ["Circle", "Square", "Triangle", "Star"]
         self.draw_shape_selection = tk.StringVar(self.root)
-        self.draw_shape_selection.set(self.draw_shape_options[0])
+        self.draw_shape_selection.set(self.draw_shape_options[1])
         self.draw_shape_menu = tk.OptionMenu(self.draw_shape_frame,
                                               self.draw_shape_selection,
                                               *self.draw_shape_options,
