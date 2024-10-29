@@ -18,11 +18,11 @@ class ShapeTool:
     def rectangle(self):
         self.shape = 'rectangle'
 
-    def square(self):
-        self.shape = 'square'
+    def Exlipse(self):
+        self.shape = 'eclipse'
 
-    def circle(self):
-        self.shape = 'circle'
+    def star(self):
+        self.shape = 'star'
 
     def triangle(self):
         self.shape = 'triangle'
