@@ -5,7 +5,7 @@ from tools import DrawTool
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
 from tools.shapes_tool import ShapeTool
-from tools.eraser_tool import Eraser
+from tools.draw_tool import Eraser
 
 class View():
 
@@ -443,12 +443,12 @@ class View():
                           y=Layout.footer["Y"],
                           width=Layout.footer["WIDTH"],
                           height=Layout.footer["HEIGHT"])
+        
+        #Initializing EraserTool
+        self.draw_tool = Eraser(self.canvas)
 
         #Initializing ShapeTool
         self.shape_tool = ShapeTool(self.root)
-
-        #Initializing EraserTool
-        self.eraser_tool = Eraser(self.root)
 
         #Shapes Menu
         self.shapes_menu = tk.Menu(self.root, tearoff=0)
@@ -479,7 +479,7 @@ class View():
         self.undo_redo.redo(self.canvas)
 
     def use_eraser(self):
-        self.eraser_tool = Eraser(self.canvas)
+        self.draw_tool = Eraser(self.canvas)
 
     def update_brush_style(self, selection):
         self.brush_style_icon.config(image=self.shape_icons_static[selection.lower()])
