@@ -1,6 +1,7 @@
 import tkinter as tk 
 from tkinter import Tk, Menu, Frame, Button, Scale, Canvas, Label, StringVar, Entry, Toplevel, messagebox, filedialog
 from tkinter.colorchooser import askcolor
+from tools.shapes_tool import ShapesTool
 
 class Window:
     def __init__(self, root):
@@ -47,6 +48,27 @@ class Window:
         # Canvas
         self.canvas = Canvas(self.root, bg='white')
         self.canvas.place(x=0, y=150, width=1200, height=750)
+
+        #shapes tool class initialzed
+        self.shapes_tool = ShapesTool(self.canvas)
+
+        #shape menu 
+        self.shapes_menu = Menu(self.root, tearoff=0)
+        self.shapes_menu.add_command(label="Rectangle", command=self.use_rectangle)
+        self.shapes_menu.add_command(label="Oval", command=self.use_oval)
+        self.shapes_menu.add_command(label="Line", command=self.use_line)
+
+        def show_shapes_menu(self, event=None):
+            self.shapes_menu.post(self.root.winfo_pointerx(), self.root.winfo_pointery())
+
+        def rectangle(self):
+            self.shapes_tool.rectangle()
+
+        def oval(self):
+            self.shapes_tool.oval()
+
+        def line(self):
+            self.shapes_tool.line()
 
 if __name__ == "__main__":
     root = Tk()
