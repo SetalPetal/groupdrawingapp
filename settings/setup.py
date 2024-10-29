@@ -102,7 +102,8 @@ class Layout():
         "BUTTON_PADDING":11,
         "SECOND_ROW_Y":11 + DEFAULT_BUTTON_HEIGHT + DEFAULT_PADDING,
         "BG_WIDTH":_COLOR_WIDTH - DEFAULT_PADDING,
-        "BG_HEIGHT":DEFAULT_TOOL_HEIGHT
+        "BG_HEIGHT":DEFAULT_TOOL_HEIGHT,
+        "LABEL_HEIGHT":41
     }
 
     brush_style = {

@@ -3,7 +3,7 @@ from tools import FileManager
 from tools import draw_tool
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
-from tools.shapes_tool import ShapesTool
+from tools.shapes_tool import ShapeTool
 
 
 class View():
@@ -46,7 +46,7 @@ class View():
         self._slider_bg_img = self._get_component_img("slider_frame_bg")
         self._size_input_output_bg_img = self._get_component_img("size_input_output_frame_bg")
         self._size_label_bg_img = self._get_component_img("plain_square_btn_inactive")
-
+        self._color_label_bg_img = self._get_component_img("color_label_bg")
         
 
         
@@ -190,9 +190,6 @@ class View():
         # testing code.
         self.size_input_output.insert(tk. END, "20")
 
-
-
-
 #------ Set up color frame and add to toolbar.
         self.color_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
         self.color_frame.place(x=Layout.color["X"],
@@ -207,7 +204,16 @@ class View():
                             y=Layout.DEFAULT_PADDING,
                             width=Layout.color["BG_WIDTH"],
                             height=Layout.color["BG_HEIGHT"])
-
+        # Add color tool label.
+        self.color_label = tk.Label(self.color_frame,
+                                    text="color",
+                                    image=self._color_label_bg_img,
+                                    compound="center")
+        self.color_label.place(x=Layout.color["X"],
+                               y=Layout.color["Y"],
+                               width=Layout.color["FRAME_WIDTH"],
+                               height=Layout.color["LABEL_HEIGHT"])
+        
 #------ Set up brush style frame and add to toolbar.
         self.brush_style_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
         self.brush_style_frame.place(x=Layout.brush_style["X"],
