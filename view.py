@@ -496,7 +496,9 @@ class View():
         self.brush_style_icon.config(image=self.shape_icons_static[selection.lower()])
 
     def select_shape_to_draw(self, selection):
+        # Update draw shape button to refelct selected shape.
         self.draw_shape_button.update_image_library(self.shape_icons_button[selection.lower()])
+        # Set shape for the shape tool.
         if selection == "Circle":
             self.shape_tool.shape = 'circle'
         elif selection == "Square":
@@ -505,8 +507,8 @@ class View():
             self.shape_tool.shape = 'triangle'
         elif selection == "Star":
             self.shape_tool.shape = 'star'
-
-        self.shape_tool.activate()
+        # Activate the shape tool.
+        self.use_draw_shape()
 
    
     def select_swatch1(self):
@@ -554,6 +556,7 @@ class View():
     def use_draw_shape(self):
         # Toggle draw shape button to active state
         self.toggle_active_button("shape")
+        self.shape_tool.activate()
 
 if __name__ == "__main__":
     root = tk.Tk()
