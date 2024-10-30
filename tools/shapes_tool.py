@@ -52,7 +52,6 @@ class ShapeTool:
             self.mouse_drag(event)
             self.current_shape = None
         self.old_x, self.old_y = None, None
-        print("Button released")
 
     def create_star(self, x1, y1, x2, y2):
         # Custom method to draw a star
