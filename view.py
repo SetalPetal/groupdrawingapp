@@ -159,7 +159,8 @@ class View():
                                    text="load",
                                    compound="center",
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   command=self.load_img_to_canvas)
         self.load_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
 
@@ -463,10 +464,15 @@ class View():
 
 
     def save_canvas(self):
-        print(f"X: {self.canvas.winfo_rootx()}, Y: {self.canvas.winfo_rooty()}")
         self.save_button.update_state("active")
         self.file_manager.save_file(self.root, self.canvas)
         self.save_button.update_state("inactive")
+
+    def load_img_to_canvas(self):
+        self.load_button.update_state("active")
+        self.canvas_image = self.file_manager.load_image(self.canvas)
+        self.canvas.create_image(0, 0, anchor='nw', image=self.canvas_image)
+        self.load_button.update_state("inactive")
 
     def update_brush_style(self, selection):
         self.brush_style_icon.config(image=self.shape_icons_static[selection.lower()])
