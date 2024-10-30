@@ -2,10 +2,11 @@ import tkinter as tk
 from tools import FileManager
 from tools import UndoRedo
 from tools import DrawTool
+from tools.color_picker import ColorPicker
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
 from tools.shapes_tool import ShapeTool
-from tools.eraser_tool import Eraser
+from tools.draw_tool import Eraser
 
 class View():
 
@@ -94,12 +95,27 @@ class View():
         #Load image compoents.
         self._load_img_components()
 
+    # Initialize colors and active swatch
+        self.swatch1_color = 'black'
+        self.swatch2_color = 'white'
+        self.active_color = self.swatch1_color
+        self.active_swatch = 1
+
 #------ Setup main window.
         self.root = root
         self.root.title("MEZ. Canvas")
         self.root.iconbitmap("data/ui_components/app_icon.ico")
         self.root.geometry(Layout.root["SIZE"])
         self.root.configure(background="black")
+
+        # Setup canvas
+        self.canvas = tk.Canvas(self.root, bg=Theme.WHITE)
+        self.canvas.place(x=Layout.canvas["X"],
+                          y=Layout.canvas["Y"],
+                          width=Layout.canvas["WIDTH"],
+                          height=Layout.canvas["HEIGHT"])
+        self.canvas.old_x = None
+        self.canvas.old_y = None
 
 
 #------ Setup toolbar frame and add to main window.
@@ -185,7 +201,7 @@ class View():
                                    command=self.use_eraser)
         self.eraser_button.place(x=Layout.draw["ERASER_BUTTON_X"],
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
-        
+        self.eraser_button.config(command=self.use_eraser)
     # #-- SHAPES BUTTON.    
     #     self.shapes_button = ZButton(self.draw_frame, self._save_btn_imgs,
     #                                  fg=Theme.BLACK, highlightthickness=0, 
@@ -258,29 +274,38 @@ class View():
                                y=Layout.DEFAULT_PADDING,
                                width=Layout.color["FRAME_WIDTH"],
                                height=Layout.color["LABEL_HEIGHT"])
-        # Add Swatch button 1.
-        self.swatch_1_button = ZButton(self.color_frame,
-                                       self.swatch_btn_imgs,
-                                       bg='red',
-                                       fg=Theme.BLACK,
-                                       highlightthickness = 0, bd = 0)
-        self.swatch_1_button.place(x=Layout.TOOLBAR_PADDING,
-                                   y=Layout.TOOLBAR_SECOND_ROW_Y)
-        #Add Swatch button 2.
-        self.swatch_2_button = ZButton(self.color_frame,
-                                   self.swatch_btn_imgs,
-                                   fg=Theme.BLACK,
-                                   bg='blue',
-                                   highlightthickness = 0, bd = 0)
-        self.swatch_2_button.place(x=Layout.color["SWATCH_2_X"],
-                               y=Layout.TOOLBAR_SECOND_ROW_Y)
-        # Add Color_picker button.
-        self.color_picker_button = ZButton(self.color_frame,
-                                   self.color_picker_btn_imgs,
-                                   fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
-        self.color_picker_button.place(x=Layout.color["PICKER_X"],
-                               y=Layout.TOOLBAR_SECOND_ROW_Y)
+        
+        # Swatch Button 1
+        self.swatch_1_button = ZButton(
+            self.color_frame,
+            self.swatch_btn_imgs,
+            bg=self.swatch1_color,
+            fg=Theme.BLACK,
+            highlightthickness=0, bd=0,
+            command=self.select_swatch1
+        )
+        self.swatch_1_button.place(x=Layout.TOOLBAR_PADDING, y=Layout.TOOLBAR_SECOND_ROW_Y)
+
+        # Swatch Button 2
+        self.swatch_2_button = ZButton(
+            self.color_frame,
+            self.swatch_btn_imgs,
+            bg=self.swatch2_color,
+            fg=Theme.BLACK,
+            highlightthickness=0, bd=0,
+            command=self.select_swatch2
+        )
+        self.swatch_2_button.place(x=Layout.color["SWATCH_2_X"], y=Layout.TOOLBAR_SECOND_ROW_Y)
+
+        # Color Picker Button
+        self.color_picker_button = ZButton(
+            self.color_frame,
+            self.color_picker_btn_imgs,
+            fg=Theme.BLACK,
+            highlightthickness=0, bd=0,
+            command=self.change_active_swatch_color
+        )
+        self.color_picker_button.place(x=Layout.color["PICKER_X"], y=Layout.TOOLBAR_SECOND_ROW_Y)
         
 #------ Set up brush style frame and add to toolbar.
         self.brush_style_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
@@ -342,6 +367,7 @@ class View():
                                y=Layout.DEFAULT_PADDING,
                                width=Layout.draw_shape["BG_WIDTH"],
                                height=Layout.draw_shape["BG_HEIGHT"])
+
         # Add draw shape label.
         self.draw_shape_label = tk.Label(self.draw_shape_frame,
                                     text="Draw Shape",
@@ -391,8 +417,6 @@ class View():
                                 height=Layout.undo_redo["BG_HEIGHT"])        
 #-------Set up undo and redo buttons using ZButton class - a modified tk.Button class.
 
-    
-
         self.undo_button = ZButton(self.undo_redo_frame,
                                    self._undo_btn_imgs,
                                    fg=Theme.BLACK,
@@ -409,32 +433,15 @@ class View():
                                    command=self.redo_action)
         self.redo_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
-
         
-#------ Setup canvas and add to main window.
-        self.canvas = tk.Canvas(self.root, bg=Theme.WHITE)
-        self.canvas.place(x=Layout.canvas["X"],
-                          y=Layout.canvas["Y"],
-                          width=Layout.canvas["WIDTH"],
-                          height=Layout.canvas["HEIGHT"])
-        self.canvas.old_x = None
-        self.canvas.old_y = None
+        # Initialize tools
+        self.shape_tool = ShapeTool(self.canvas)
+        self.draw_tool = DrawTool(self.canvas, self.undo_redo, self)
+        self.eraser_tool = Eraser(self.canvas)
 
-        self.draw_tool = DrawTool(self.canvas, self.undo_redo)
-
-        #Fleshed out pencil button linked to draw_tool def
-        self.pencil_button.config(command=self.draw_tool.activate)
-        # self.pencil_button = ZButton(
-        #     self.draw_frame,
-        #     self._pencil_btn_imgs,
-        #     fg=Theme.BLACK,
-        #     highlightthickness=0, 
-        #     bd=0,
-        #     command=self.draw_tool.activate)
-
-
-        # self.pencil_button.place(x=Layout.draw["TOOLBAR_PADDING"],
-        #                          y=Layout.draw["TOOLBAR_PADDING"])
+        # Configure tool buttons
+        self.pencil_button.config(command=self.use_pencil)
+        self.eraser_button.config(command=self.use_eraser)
         
         
 #------ Set up footer and add to main window.
@@ -445,34 +452,6 @@ class View():
                           width=Layout.footer["WIDTH"],
                           height=Layout.footer["HEIGHT"])
 
-        #Initializing ShapeTool
-        self.shape_tool = ShapeTool(self.root)
-
-        #Initializing EraserTool
-        self.eraser_tool = Eraser(self.root)
-
-        #Shapes Menu
-        self.shapes_menu = tk.Menu(self.root, tearoff=0)
-        self.shapes_menu.add_command(label="Rectangle", command=self.use_rectangle)
-        self.shapes_menu.add_command(label="Eclipse", command=self.use_eclipse)
-        self.shapes_menu.add_command(label="Star", command=self.use_star)
-        self.shapes_menu.add_command(label="Triangle", command=self.use_triangle)
-
-    def show_shapes_menu(self, event=None):
-        self.shapes_menu.post(self.root.winfo_pointerx(), self.root.winfo_pointery())
-        
-    def use_rectangle(self):
-        self.shape_tool.rectangle()
-
-    def use_eclipse(self):
-        self.shape_tool.eclipse()
-
-    def use_star(self):
-        self.shape_tool.star()
-
-    def use_triangle(self):
-        self.shape_tool.triangle()
-
     def undo_action(self):
         self.undo_redo.undo(self.canvas)
     
@@ -480,7 +459,8 @@ class View():
         self.undo_redo.redo(self.canvas)
 
     def use_eraser(self):
-        self.eraser_tool = Eraser(self.canvas)
+        self.eraser_tool.activate()
+
 
     def save_canvas(self):
         print(f"X: {self.canvas.winfo_rootx()}, Y: {self.canvas.winfo_rooty()}")
@@ -493,7 +473,42 @@ class View():
 
     def select_shape_to_draw(self, selection):
         self.draw_shape_button.update_image_library(self.shape_icons_button[selection.lower()])
+        if selection == "Circle":
+            self.shape_tool.shape = 'circle'
+        elif selection == "Square":
+            self.shape_tool.shape = 'square'
+        elif selection == "Triangle":
+            self.shape_tool.shape = 'triangle'
+        elif selection == "Star":
+            self.shape_tool.shape = 'star'
 
+        self.shape_tool.shape = selection.lower()
+   
+    def select_swatch1(self):
+        self.active_color = self.swatch1_color
+        self.active_swatch = 1
+
+    def select_swatch2(self):
+        self.active_color = self.swatch2_color
+        self.active_swatch = 2
+
+    def change_active_swatch_color(self):
+        new_color = ColorPicker(self.root).get_color()
+        if new_color:
+            if self.active_swatch == 1:
+                self.swatch1_color = new_color
+                self.active_color = new_color
+                self.swatch_1_button.config(bg=self.swatch1_color)
+            else:
+                self.swatch2_color = new_color
+                self.active_color = new_color
+                self.swatch_2_button.config(bg=self.swatch2_color)
+
+    def use_pencil(self):
+        self.draw_tool.activate()
+
+    def use_eraser(self):
+        self.eraser_tool.activate()
 
 if __name__ == "__main__":
     root = tk.Tk()
