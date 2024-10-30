@@ -16,8 +16,8 @@ class ShapeTool:
         self.canvas.bind('<B1-Motion>', self.mouse_drag)
         self.canvas.bind('<ButtonRelease-1>', self.button_release)
 
-    def rectangle(self):
-        self.shape = 'rectangle'
+    def square(self):
+        self.shape = 'square'
 
     def circle(self):
         self.shape = 'circle'
@@ -36,12 +36,12 @@ class ShapeTool:
         if self.shape:
             if self.current_shape:
                 self.canvas.delete(self.current_shape)
-            if self.shape == 'rectangle':
-                self.current_shape = self.canvas.create_rectangle(self.old_x, self.old_y, event.x, event.y,
-                                                                  outline=self.color, fill=self.fill_color)
-            elif self.shape == 'circle':
+            if self.shape == 'circle':
                 self.current_shape = self.canvas.create_oval(self.old_x, self.old_y, event.x, event.y,
                                                              outline=self.color, fill=self.fill_color)
+            elif self.shape == 'square':
+                self.current_shape = self.canvas.create_rectangle(self.old_x, self.old_y, event.x, event.y,
+                                                                  outline=self.color, fill=self.fill_color)
             elif self.shape == 'star':
                 self.current_shape = self.create_star(self.old_x, self.old_y, event.x, event.y)
             elif self.shape == 'triangle':
