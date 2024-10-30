@@ -3,8 +3,8 @@ class DrawTool:
     MIN_SIZE = 1
     MAX_SIZE = 50
 
-    def __init__(self, canvas, undo_redo, view):
-        self.canvas = canvas
+    def __init__(self, view, undo_redo):
+        self.canvas = view.get_canvas()
         self.undo_redo = undo_redo
         self.view = view  # Ensures its the view
         self.size = view.get_draw_size()
@@ -57,15 +57,21 @@ class DrawTool:
         self.canvas.old_y = None
 
     def update_size(self, size):
-        self.size = size
+        self.size = int(size)
 
 
 class Eraser:
-    def __init__(self, canvas):
-        self.canvas = canvas
+
+    MIN_SIZE = 1
+    MAX_SIZE = 200
+
+    def __init__(self, view):
+        self.view = view
+        self.canvas = view.get_canvas()
         self.old_x = None
         self.old_y = None
-        self.eraser_size = 10
+        self.size = view.get_draw_size()
+
 
     def activate(self):
         self.canvas.unbind("<Button-1>")
@@ -75,13 +81,10 @@ class Eraser:
         self.canvas.bind('<B1-Motion>', self.erase)
         self.canvas.bind('<ButtonRelease-1>', self.reset)
 
-    def set_eraser_size(self, size):
-        self.eraser_size = size
-
     def erase(self, event):
         if self.old_x and self.old_y:
-            x1, y1 = (event.x - self.eraser_size), (event.y - self.eraser_size)
-            x2, y2 = (event.x + self.eraser_size), (event.y + self.eraser_size)
+            x1, y1 = (event.x - (self.size / 2)), (event.y - (self.size / 2))
+            x2, y2 = (event.x + (self.size / 2)), (event.y + (self.size / 2))
             self.canvas.create_rectangle(x1, y1, x2, y2, fill='white', outline='white')
         self.old_x = event.x
         self.old_y = event.y
@@ -89,3 +92,6 @@ class Eraser:
     def reset(self, event):
         self.old_x = None
         self.old_y = None
+
+    def update_size(self, size):
+        self.size = int(size)

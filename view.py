@@ -342,7 +342,7 @@ class View():
                                      height=Layout.brush_style["LABEL_HEIGHT"])
     #-- Add brush style icon.
         self.brush_style_icon = tk.Label(self.brush_style_frame,
-                                         image=self.circle_btn_imgs["active"],
+                                         image=self.line_horizontal_btn_imgs["active"],
                                          bg=Theme.LIGHT_GRAY)
         self.brush_style_icon.place(x=Layout.brush_style["ICON_X"],
                                     y=Layout.brush_style["ICON_Y"],
@@ -352,7 +352,7 @@ class View():
         self.brush_style_options = ["Circle", "Square", "Triangle", "Star",
                                     "Line 1", "Line 2", "Line 3", "Line 4"]
         self.brush_style_selection = tk.StringVar(self.root)
-        self.brush_style_selection.set(self.brush_style_options[0])
+        self.brush_style_selection.set(self.brush_style_options[4])
         self.brush_style_menu = tk.OptionMenu(self.brush_style_frame,
                                               self.brush_style_selection,
                                               *self.brush_style_options,
@@ -449,15 +449,15 @@ class View():
         self.draw_size = self._DEFAULT_DRAW_SIZE
 
         # Initialize tools
-        self.shape_tool = ShapeTool(self.canvas)
-        self.draw_tool = DrawTool(self.canvas, self.undo_redo, self)
-        self.eraser_tool = Eraser(self.canvas)
-        self.brush_tool = BrushTool(self.canvas, self)
-        print(self.draw_tool)
+        self.shape_tool = ShapeTool(self)
+        self.draw_tool = DrawTool(self, self.undo_redo)
+        self.eraser_tool = Eraser(self)
+        self.brush_tool = BrushTool(self)
 
         
         self.size_scale(self._DEFAULT_DRAW_SIZE)
-        # Active Button - Used to teack which tool is active.
+        self.select_swatch1()
+        # Active Button - Used to track which tool is active.
         self.active_button = self.pencil_button
         
         
@@ -549,18 +549,20 @@ class View():
                 self.swatch1_color = new_color
                 self.active_color = new_color
                 self.swatch_1_button.config(bg=self.swatch1_color)
-                self.swatch_1_button.update("active")
+                self.swatch_1_button.update_state("active")
             else:
                 self.swatch2_color = new_color
                 self.active_color = new_color
                 self.swatch_2_button.config(bg=self.swatch2_color)
+        # Update shape tool colors.
+        self.shape_tool.update_colors()
 
     def size_scale(self, size):
         # Clear size entry and insert size from the scale slider.
         self.size_entry.delete(0, "end")
         self.size_entry.insert(0, size)
         # set draw size for class.
-        self.draw_size = size
+        self.draw_size = int(size)
         # update size for tools.
         self.update_tool_size(self.draw_size)
 
@@ -580,12 +582,11 @@ class View():
     def _size_entry_validation(self, text):
         # Return true/false if text contains only decimal characters.
         return text.isdecimal()
-    
-    def get_draw_size(self):
-        return self.draw_size
 
     def update_tool_size(self, size):
         self.draw_tool.update_size(size)
+        self.eraser_tool.update_size(size)
+        self.brush_tool.update_size(size)
         
     
     def use_pencil(self):
@@ -603,6 +604,12 @@ class View():
     def use_paint(self):
         # Toggle paint button to active state
         self.toggle_active_button("paint")
+        # Change size scale.
+        self.size_slider.config(to=self.brush_tool.MAX_SIZE)
+        # Re-adjust size scale to match new range.
+        self.size_scale(self.draw_size)
+        # Set brush size.
+        self.draw_tool.update_size(self.draw_size)
         # Activate brush tool.
         self.brush_tool.activate()
         
@@ -610,6 +617,12 @@ class View():
     def use_eraser(self):
         # Toggle eraser button to active state
         self.toggle_active_button("eraser")
+        # Change size scale.
+        self.size_slider.config(to=self.eraser_tool.MAX_SIZE)
+        # Re-adjust size scale to match new range.
+        self.size_scale(self.draw_size)
+        # Set eraser size.
+        self.draw_tool.update_size(self.draw_size)
         # Activate eraser tool.
         self.eraser_tool.activate()
 
@@ -618,6 +631,21 @@ class View():
         self.toggle_active_button("shape")
         # Activate the shape tool.
         self.shape_tool.activate()
+
+    def get_draw_size(self):
+        return int(self.draw_size)
+    
+    def get_canvas(self):
+        return self.canvas
+    
+    def get_swatch_color(self, swatch):
+        # Use "swatch_1" or "swatch_2" to get swatch color.
+        if swatch == "swatch_1":
+            return self.swatch1_color
+        elif swatch == "swatch_2":
+            return self.swatch2_color
+        else:
+            raise ValueError("Value for swatch does not exist.")
 
     
 

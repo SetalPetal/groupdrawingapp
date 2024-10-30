@@ -1,14 +1,15 @@
 import tkinter as tk
 
 class ShapeTool:
-    def __init__(self, canvas):
-        self.canvas = canvas
+    def __init__(self, view):
+        self.view = view
+        self.canvas = view.get_canvas()
         self.old_x = None
         self.old_y = None
-        self.color = 'black'
-        self.fill_color = 'white'
+        self.color = view.get_swatch_color("swatch_1")
+        self.fill_color = view.get_swatch_color("swatch_2")
         self.brush_size = 10
-        self.shape = None
+        self.shape = "square"
         self.current_shape = None
 
         # Bind for mouse events
@@ -68,3 +69,7 @@ class ShapeTool:
         # Custom method to draw a triangle
         points = [x1, y2, (x1 + x2) / 2, y1, x2, y2]
         return self.canvas.create_polygon(points, outline=self.color, fill=self.fill_color)
+    
+    def update_colors(self):
+        self.color = self.view.get_swatch_color("swatch_1")
+        self.fill_color = self.view.get_swatch_color("swatch_2")
