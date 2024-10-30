@@ -133,7 +133,8 @@ class View():
                                    text="Save",
                                    compound="center",
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   command=self.save_canvas)
         self.save_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_PADDING)
     #-- LOAD BUTTON.
@@ -480,6 +481,12 @@ class View():
 
     def use_eraser(self):
         self.eraser_tool = Eraser(self.canvas)
+
+    def save_canvas(self):
+        print(f"X: {self.canvas.winfo_rootx()}, Y: {self.canvas.winfo_rooty()}")
+        self.save_button.update_state("active")
+        self.file_manager.save_file(self.root, self.canvas)
+        self.save_button.update_state("inactive")
 
     def update_brush_style(self, selection):
         self.brush_style_icon.config(image=self.shape_icons_static[selection.lower()])

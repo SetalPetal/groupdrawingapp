@@ -36,6 +36,7 @@ class ZButton(Button):
         # Update state and button image.
         self.state = state
         self.config(image=self.img_library[self.state])
+        self.config(fg=Theme.BLACK)
 
     def update_image_library(self, image_library):
          self.img_library = image_library
