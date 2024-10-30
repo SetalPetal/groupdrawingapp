@@ -1,3 +1,5 @@
+import tkinter as tk
+
 class BrushTool:
     def __init__(self, canvas, view):
         self.canvas = canvas
@@ -22,7 +24,7 @@ class BrushTool:
     def draw(self, event):
         if self.canvas.old_x and self.canvas.old_y:
             x, y = event.x, event.y
-            fill_color = self.view.active_color  # Selected color
+            fill_color = self.view.active_color 
             if self.brush_style == 'line 1':
                 self.canvas.create_line(self.canvas.old_x, self.canvas.old_y, x, y, fill=fill_color, width=2)
             elif self.brush_style == 'line 2':

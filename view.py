@@ -496,6 +496,8 @@ class View():
 
     def update_brush_style(self, selection):
         self.brush_style_icon.config(image=self.shape_icons_static[selection.lower()])
+        self.brush_tool.set_brush_style(selection.lower())
+        self.brush_tool.activate()
 
     def select_shape_to_draw(self, selection):
         # Update draw shape button to refelct selected shape.
