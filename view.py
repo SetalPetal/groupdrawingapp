@@ -455,16 +455,6 @@ class View():
 
         #Initializing ShapeTool
         self.shape_tool = ShapeTool(self.root)
-
-        #Shapes Menu
-        self.shapes_menu = tk.Menu(self.root, tearoff=0)
-        self.shapes_menu.add_command(label="Rectangle", command=self.use_rectangle)
-        self.shapes_menu.add_command(label="Eclipse", command=self.use_eclipse)
-        self.shapes_menu.add_command(label="Star", command=self.use_star)
-        self.shapes_menu.add_command(label="Triangle", command=self.use_triangle)
-
-    def show_shapes_menu(self, event=None):
-        self.shapes_menu.post(self.root.winfo_pointerx(), self.root.winfo_pointery())
         
     def use_rectangle(self):
         self.shape_tool.rectangle()
