@@ -108,6 +108,15 @@ class View():
         self.root.geometry(Layout.root["SIZE"])
         self.root.configure(background="black")
 
+        # Setup canvas
+        self.canvas = tk.Canvas(self.root, bg=Theme.WHITE)
+        self.canvas.place(x=Layout.canvas["X"],
+                          y=Layout.canvas["Y"],
+                          width=Layout.canvas["WIDTH"],
+                          height=Layout.canvas["HEIGHT"])
+        self.canvas.old_x = None
+        self.canvas.old_y = None
+
 
 #------ Setup toolbar frame and add to main window.
         self.toolbar = tk.Frame(self.root,
@@ -357,6 +366,7 @@ class View():
                                y=Layout.DEFAULT_PADDING,
                                width=Layout.draw_shape["BG_WIDTH"],
                                height=Layout.draw_shape["BG_HEIGHT"])
+
         # Add draw shape label.
         self.draw_shape_label = tk.Label(self.draw_shape_frame,
                                     text="Draw Shape",
@@ -406,8 +416,6 @@ class View():
                                 height=Layout.undo_redo["BG_HEIGHT"])        
 #-------Set up undo and redo buttons using ZButton class - a modified tk.Button class.
 
-    
-
         self.undo_button = ZButton(self.undo_redo_frame,
                                    self._undo_btn_imgs,
                                    fg=Theme.BLACK,
@@ -424,18 +432,9 @@ class View():
                                    command=self.redo_action)
         self.redo_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
-
         
-        # Setup canvas
-        self.canvas = tk.Canvas(self.root, bg=Theme.WHITE)
-        self.canvas.place(x=Layout.canvas["X"],
-                          y=Layout.canvas["Y"],
-                          width=Layout.canvas["WIDTH"],
-                          height=Layout.canvas["HEIGHT"])
-        self.canvas.old_x = None
-        self.canvas.old_y = None
-
         # Initialize tools
+        self.shape_tool = ShapeTool(self.canvas)
         self.draw_tool = DrawTool(self.canvas, self.undo_redo, self)
         self.eraser_tool = Eraser(self.canvas)
 
@@ -451,22 +450,6 @@ class View():
                           y=Layout.footer["Y"],
                           width=Layout.footer["WIDTH"],
                           height=Layout.footer["HEIGHT"])
-        
-
-        #Initializing ShapeTool
-        self.shape_tool = ShapeTool(self.root)
-        
-    def use_rectangle(self):
-        self.shape_tool.rectangle()
-
-    def use_eclipse(self):
-        self.shape_tool.eclipse()
-
-    def use_star(self):
-        self.shape_tool.star()
-
-    def use_triangle(self):
-        self.shape_tool.triangle()
 
     def undo_action(self):
         self.undo_redo.undo(self.canvas)
@@ -483,7 +466,17 @@ class View():
 
     def select_shape_to_draw(self, selection):
         self.draw_shape_button.update_image_library(self.shape_icons_button[selection.lower()])
+        if selection == "Circle":
+            self.shape_tool.shape = 'circle'
+        elif selection == "Square":
+            self.shape_tool.shape = 'square'
+        elif selection == "Triangle":
+            self.shape_tool.shape = 'triangle'
+        elif selection == "Star":
+            self.shape_tool.shape = 'star'
 
+        self.shape_tool.shape = selection.lower()
+   
     def select_swatch1(self):
         self.active_color = self.swatch1_color
         self.active_swatch = 1
@@ -509,9 +502,6 @@ class View():
 
     def use_eraser(self):
         self.eraser_tool.activate()
-
-
-
 
 if __name__ == "__main__":
     root = tk.Tk()
