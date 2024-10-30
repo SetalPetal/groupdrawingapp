@@ -27,6 +27,10 @@ class Layout():
     _BRUSH_STYLE_WIDTH = 181
     _DRAW_SHAPE_WIDTH = 181
     _UNDO_REDO_WIDTH = 59
+    _TOOL_FRAME_TOTAL_WIDTH = (_LOAD_SAVE_WIDTH + _DRAW_WIDTH +
+                               _COLOR_WIDTH + _BRUSH_STYLE_WIDTH +
+                               _DRAW_SHAPE_WIDTH + _UNDO_REDO_WIDTH)
+    _TOOL_START_X = (_WINDOW_WIDTH - _TOOL_FRAME_TOTAL_WIDTH) / 2
     
 
     
@@ -62,7 +66,7 @@ class Layout():
     load_save = {
         "FRAME_WIDTH":_LOAD_SAVE_WIDTH,
         "FRAME_HEIGHT":_TOOLBAR_HEIGHT,
-        "X":0,
+        "X":_TOOL_START_X,
         "Y":0,
         "BG_WIDTH":_LOAD_SAVE_WIDTH - DEFAULT_PADDING,
         "BG_HEIGHT":DEFAULT_TOOL_HEIGHT
@@ -71,7 +75,7 @@ class Layout():
     draw = {
         "FRAME_WIDTH":_DRAW_WIDTH,
         "FRAME_HEIGHT":_TOOLBAR_HEIGHT,
-        "X":_LOAD_SAVE_WIDTH,
+        "X":_TOOL_START_X + _LOAD_SAVE_WIDTH,
         "Y":0,
         "BG_WIDTH":_DRAW_WIDTH - DEFAULT_PADDING,
         "BG_HEIGHT":DEFAULT_TOOL_HEIGHT,
@@ -93,7 +97,7 @@ class Layout():
     color = {
         "FRAME_WIDTH":_COLOR_WIDTH,
         "FRAME_HEIGHT":_TOOLBAR_HEIGHT,
-        "X":_LOAD_SAVE_WIDTH + _DRAW_WIDTH,
+        "X":_TOOL_START_X + _LOAD_SAVE_WIDTH + _DRAW_WIDTH,
         "Y":0,
         "BG_WIDTH":_COLOR_WIDTH - DEFAULT_PADDING,
         "BG_HEIGHT":DEFAULT_TOOL_HEIGHT,
@@ -110,7 +114,7 @@ class Layout():
     brush_style = {
         "FRAME_WIDTH":_BRUSH_STYLE_WIDTH,
         "FRAME_HEIGHT":_TOOLBAR_HEIGHT,
-        "X":_LOAD_SAVE_WIDTH + _DRAW_WIDTH + _COLOR_WIDTH,
+        "X":_TOOL_START_X + _LOAD_SAVE_WIDTH + _DRAW_WIDTH + _COLOR_WIDTH,
         "Y":0,
         "BG_WIDTH":_BRUSH_STYLE_WIDTH - DEFAULT_PADDING,
         "BG_HEIGHT":DEFAULT_TOOL_HEIGHT,
@@ -125,7 +129,7 @@ class Layout():
     draw_shape = {
         "FRAME_WIDTH":_DRAW_SHAPE_WIDTH,
         "FRAME_HEIGHT":_TOOLBAR_HEIGHT,
-        "X":_LOAD_SAVE_WIDTH + _DRAW_WIDTH + _COLOR_WIDTH + _BRUSH_STYLE_WIDTH,
+        "X":_TOOL_START_X + _LOAD_SAVE_WIDTH + _DRAW_WIDTH + _COLOR_WIDTH + _BRUSH_STYLE_WIDTH,
         "Y":0,
         "BG_WIDTH":_DRAW_SHAPE_WIDTH - DEFAULT_PADDING,
         "BG_HEIGHT":DEFAULT_TOOL_HEIGHT,
@@ -140,7 +144,7 @@ class Layout():
     undo_redo = {
         "FRAME_WIDTH":_UNDO_REDO_WIDTH,
         "FRAME_HEIGHT":_TOOLBAR_HEIGHT,
-        "X":_LOAD_SAVE_WIDTH + _DRAW_WIDTH + _COLOR_WIDTH + _BRUSH_STYLE_WIDTH + _DRAW_SHAPE_WIDTH,
+        "X":_TOOL_START_X + _LOAD_SAVE_WIDTH + _DRAW_WIDTH + _COLOR_WIDTH + _BRUSH_STYLE_WIDTH + _DRAW_SHAPE_WIDTH,
         "Y":0,
         "BG_WIDTH":_UNDO_REDO_WIDTH - (DEFAULT_PADDING * 2) - 2,
         "BG_HEIGHT":DEFAULT_TOOL_HEIGHT

@@ -1,8 +1,13 @@
 class DrawTool:
+
+    MIN_SIZE = 1
+    MAX_SIZE = 50
+
     def __init__(self, canvas, undo_redo, view):
         self.canvas = canvas
         self.undo_redo = undo_redo
-        self.view = view  # Ensures its the view 
+        self.view = view  # Ensures its the view
+        self.size = view.get_draw_size()
 
     def activate(self):        
         self.canvas.unbind("<Button-1>")
@@ -32,7 +37,7 @@ class DrawTool:
             x, 
             y, 
             fill=fill_color, 
-            width=2
+            width=self.size
         )
         # Add recorded line 
         self.undo_redo.add_action({
@@ -40,7 +45,7 @@ class DrawTool:
             'id': line_id,
             'coords': (self.canvas.old_x, self.canvas.old_y, x, y),
             'fill': fill_color,
-            'width': 2
+            'width': self.size
         })
         self.canvas.old_x = x
         self.canvas.old_y = y
@@ -50,6 +55,9 @@ class DrawTool:
         self.undo_redo.end_group()
         self.canvas.old_x = None
         self.canvas.old_y = None
+
+    def update_size(self, size):
+        self.size = size
 
 
 class Eraser:

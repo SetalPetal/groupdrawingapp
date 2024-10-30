@@ -5,6 +5,10 @@ from tools import DrawTool
 from tools.color_picker import ColorPicker
 from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
+from tools import FileManager
+from tools import UndoRedo
+from tools import DrawTool
+from tools.color_picker import ColorPicker
 from tools.shapes_tool import ShapeTool
 from tools.draw_tool import Eraser
 from tools.brush_tool import BrushTool
@@ -180,14 +184,15 @@ class View():
         self.pencil_button = ZButton(self.draw_frame,
                                    self._pencil_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness=0, bd=0,
+                                   command=self.use_pencil)
         self.pencil_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_PADDING)
     #-- PAINT BUTTON.
         self.paint_button = ZButton(self.draw_frame,
                                    self._paint_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0,
+                                   highlightthickness=0, bd=0,
                                    command=self.use_paint)
         self.paint_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
@@ -196,17 +201,11 @@ class View():
         self.eraser_button = ZButton(self.draw_frame,
                                    self._eraser_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0,
+                                   highlightthickness =0, bd=0,
                                    command=self.use_eraser)
         self.eraser_button.place(x=Layout.draw["ERASER_BUTTON_X"],
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
         self.eraser_button.config(command=self.use_eraser)
-    # #-- SHAPES BUTTON.    
-    #     self.shapes_button = ZButton(self.draw_frame, self._save_btn_imgs,
-    #                                  fg=Theme.BLACK, highlightthickness=0, 
-    #                                  bd=0, 
-    #                                  command=self.show_shapes_menu)
-    #     self.shapes_button.place()
         # Slider background.
         self.slider_bg = tk.Label(self.draw_frame,
                                 image=self._slider_bg_img,
@@ -216,7 +215,13 @@ class View():
                                 width=Layout.draw["SLIDER_BG_WIDTH"],
                                 height=Layout.DEFAULT_BUTTON_SIZE)
     #-- Size Slider.
-        self.size_slider = tk.Scale(self.draw_frame, from_=0, to=200, showvalue=False,orient="horizontal")
+        self.slider_value = tk.StringVar()
+        self.size_slider = tk.Scale(self.draw_frame,
+                                    from_=1, to=200,
+                                    showvalue=False,
+                                    orient="horizontal",
+                                    variable=self.slider_value,
+                                    command=self.size_scale)
         self.size_slider.place(x=Layout.draw["SIZE_SLIDER_X"],
                                y=Layout.draw["SIZE_SLIDER_Y"],
                                width=Layout.draw["SIZE_SLIDER_WIDTH"],
@@ -240,14 +245,20 @@ class View():
                               y=Layout.TOOLBAR_SECOND_ROW_Y,
                               width=Layout.DEFAULT_BUTTON_SIZE,
                               height=Layout.DEFAULT_BUTTON_SIZE)
-    #-- Size text input/output.
-        self.size_input_output = tk.Text(self.draw_frame)
-        self.size_input_output.place(x=Layout.draw["TEXT_BOX_X"],
+    #-- Size text input/output
+        self.size_entry_value = tk.StringVar()
+        self.size_entry = tk.Entry(self.draw_frame,
+                                   textvariable=self.size_entry_value,
+                                   validate="key",
+                                   validatecommand=(root.register(self._size_entry_validation), "%S"))
+        self.size_entry.place(x=Layout.draw["TEXT_BOX_X"],
                                      y=Layout.draw["TEXT_BOX_Y"],
                                      width=Layout.draw["TEXT_BOX_WIDTH"],
                                      height=Layout.draw["TEXT_BOX_HEIGHT"])
+        self.size_entry.bind('<FocusOut>', self.size_entry_input)
+        self.size_entry.bind('<Return>', self.size_entry_input)
         # testing code.
-        self.size_input_output.insert(tk. END, "20")
+        self.size_entry.insert(tk. END, "20")
 
 #------ Set up color frame and add to toolbar.
         self.color_frame = tk.Frame(self.toolbar, bg=Theme.BLACK)
@@ -434,18 +445,21 @@ class View():
         self.redo_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
         
-        # Active Button - Used to teack which tool is active.
-        self.active_button = self.pencil_button
-        
+        # Initialise size variable.
+        self._DEFAULT_DRAW_SIZE = 2
+        self.draw_size = self._DEFAULT_DRAW_SIZE
+
         # Initialize tools
         self.shape_tool = ShapeTool(self.canvas)
         self.draw_tool = DrawTool(self.canvas, self.undo_redo, self)
         self.eraser_tool = Eraser(self.canvas)
         self.brush_tool = BrushTool(self.canvas, self)
+        print(self.draw_tool)
 
-        # Configure tool buttons
-        self.pencil_button.config(command=self.use_pencil)
-        self.eraser_button.config(command=self.use_eraser)
+        
+        self.size_scale(self._DEFAULT_DRAW_SIZE)
+        # Active Button - Used to teack which tool is active.
+        self.active_button = self.pencil_button
         
         
 #------ Set up footer and add to main window.
@@ -497,7 +511,8 @@ class View():
     def update_brush_style(self, selection):
         self.brush_style_icon.config(image=self.shape_icons_static[selection.lower()])
         self.brush_tool.set_brush_style(selection.lower())
-        self.brush_tool.activate()
+        # Activate the brush tool.
+        self.use_paint()
 
     def select_shape_to_draw(self, selection):
         # Update draw shape button to refelct selected shape.
@@ -514,13 +529,11 @@ class View():
         # Activate the shape tool.
         self.use_draw_shape()
 
-   
     def select_swatch1(self):
         self.active_color = self.swatch1_color
         self.active_swatch = 1
         self.swatch_1_button.update_state("active")
         self.swatch_2_button.update_state("inactive")
-        
 
     def select_swatch2(self):
         self.active_color = self.swatch2_color
@@ -543,24 +556,71 @@ class View():
                 self.active_color = new_color
                 self.swatch_2_button.config(bg=self.swatch2_color)
 
+    def size_scale(self, size):
+        # Clear size entry and insert size from the scale slider.
+        self.size_entry.delete(0, "end")
+        self.size_entry.insert(0, size)
+        # set draw size for class.
+        self.draw_size = size
+        # update size for tools.
+        self.update_tool_size(self.draw_size)
+
+    def size_entry_input(self, event):
+        # get text from size entry variable and convert to int.
+        size = int(self.size_entry_value.get())
+        # Set scale slider to match value of size entry.
+        self.size_slider.set(size)
+        # set draw size for class.
+        self.draw_size = size
+        # update size for tools.
+        self.update_tool_size(size)
+        # Return focus to main window (root)
+        root.focus()
+
+    # Used for size entry validation to ensure only decimal characters are entered.
+    def _size_entry_validation(self, text):
+        # Return true/false if text contains only decimal characters.
+        return text.isdecimal()
+    
+    def get_draw_size(self):
+        return self.draw_size
+
+    def update_tool_size(self, size):
+        self.draw_tool.update_size(size)
+        
+    
     def use_pencil(self):
         # Toggle pencil button to active state
         self.toggle_active_button("pencil")
+        # Change size scale.
+        self.size_slider.config(to=self.draw_tool.MAX_SIZE)
+        # Re-adjust size scale to match new range.
+        self.size_scale(self.draw_size)
+        # Set draw size.
+        self.draw_tool.update_size(self.draw_size)
+        # Activate draw (pencil) tool.
         self.draw_tool.activate()
 
     def use_paint(self):
         # Toggle paint button to active state
         self.toggle_active_button("paint")
+        # Activate brush tool.
+        self.brush_tool.activate()
+        
 
     def use_eraser(self):
         # Toggle eraser button to active state
         self.toggle_active_button("eraser")
+        # Activate eraser tool.
         self.eraser_tool.activate()
 
     def use_draw_shape(self):
         # Toggle draw shape button to active state
         self.toggle_active_button("shape")
+        # Activate the shape tool.
         self.shape_tool.activate()
+
+    
 
 if __name__ == "__main__":
     root = tk.Tk()
