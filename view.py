@@ -79,11 +79,7 @@ class View():
         self._color_bg_img = self._get_component_img("color_frame_bg")
         self._color_label_bg_img = self._get_component_img("color_label_bg")
         self.brush_style_label_img = self._get_component_img("brush_style_label_bg")
-        self.draw_shape_label_img = self._get_component_img("draw_shape_label_bg")
-
-        
-
-        
+        self.draw_shape_label_img = self._get_component_img("draw_shape_label_bg")        
 
     def __init__(self, root):
 
@@ -190,7 +186,8 @@ class View():
         self.paint_button = ZButton(self.draw_frame,
                                    self._paint_btn_imgs,
                                    fg=Theme.BLACK,
-                                   highlightthickness = 0, bd = 0)
+                                   highlightthickness = 0, bd = 0,
+                                   command=self.use_paint)
         self.paint_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
 
@@ -384,7 +381,8 @@ class View():
                                    self.square_btn_imgs,
                                    fg=Theme.BLACK,
                                    highlightthickness = 0, bd = 0,
-                                   bg=Theme.LIGHT_GRAY)
+                                   bg=Theme.LIGHT_GRAY,
+                                   command=self.use_draw_shape)
         self.draw_shape_button.place(x=Layout.draw_shape["BUTTON_X"],
                                     y=Layout.draw_shape["BUTTON_Y"],
                                     width=Layout.DEFAULT_BUTTON_SIZE,
@@ -435,6 +433,9 @@ class View():
         self.redo_button.place(x=Layout.TOOLBAR_PADDING,
                                y=Layout.TOOLBAR_SECOND_ROW_Y)
         
+        # Active Button - Used to teack which tool is active.
+        self.active_button = self.pencil_button
+        
         # Initialize tools
         self.shape_tool = ShapeTool(self.canvas)
         self.draw_tool = DrawTool(self.canvas, self.undo_redo, self)
@@ -453,15 +454,32 @@ class View():
                           width=Layout.footer["WIDTH"],
                           height=Layout.footer["HEIGHT"])
 
+    def toggle_active_button(self, button_id):
+        # Set active button that matches button ID.
+        if button_id.lower() == "pencil":
+            self.active_button = self.pencil_button
+        elif button_id.lower() == "paint":
+            self.active_button = self.paint_button
+        elif button_id.lower() == "eraser":
+            self.active_button = self.eraser_button
+        elif button_id.lower() == "shape":
+            self.active_button = self.draw_shape_button
+        else:
+            raise ValueError("Input was not a valid button ID.")
+        # Set all tool buttons back to inactive state.
+        self.pencil_button.update_state("inactive")
+        self.paint_button.update_state("inactive")
+        self.eraser_button.update_state("inactive")
+        self.draw_shape_button.update_state("inactive")
+        # Set active button state to active.
+        self.active_button.update_state("active")
+
+
     def undo_action(self):
         self.undo_redo.undo(self.canvas)
     
     def redo_action(self):
         self.undo_redo.redo(self.canvas)
-
-    def use_eraser(self):
-        self.eraser_tool.activate()
-
 
     def save_canvas(self):
         self.save_button.update_state("active")
@@ -493,28 +511,48 @@ class View():
     def select_swatch1(self):
         self.active_color = self.swatch1_color
         self.active_swatch = 1
+        self.swatch_1_button.update_state("active")
+        self.swatch_2_button.update_state("inactive")
+        
 
     def select_swatch2(self):
         self.active_color = self.swatch2_color
         self.active_swatch = 2
+        self.swatch_1_button.update_state("inactive")
+        self.swatch_2_button.update_state("active")
 
     def change_active_swatch_color(self):
+        self.color_picker_button.update_state("active")
         new_color = ColorPicker(self.root).get_color()
+        self.color_picker_button.update_state("inactive")
         if new_color:
             if self.active_swatch == 1:
                 self.swatch1_color = new_color
                 self.active_color = new_color
                 self.swatch_1_button.config(bg=self.swatch1_color)
+                self.swatch_1_button.update("active")
             else:
                 self.swatch2_color = new_color
                 self.active_color = new_color
                 self.swatch_2_button.config(bg=self.swatch2_color)
 
     def use_pencil(self):
+        # Toggle pencil button to active state
+        self.toggle_active_button("pencil")
         self.draw_tool.activate()
 
+    def use_paint(self):
+        # Toggle paint button to active state
+        self.toggle_active_button("paint")
+
     def use_eraser(self):
+        # Toggle eraser button to active state
+        self.toggle_active_button("eraser")
         self.eraser_tool.activate()
+
+    def use_draw_shape(self):
+        # Toggle draw shape button to active state
+        self.toggle_active_button("shape")
 
 if __name__ == "__main__":
     root = tk.Tk()
