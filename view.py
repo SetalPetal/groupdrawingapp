@@ -118,7 +118,6 @@ class View():
         self.canvas.old_x = None
         self.canvas.old_y = None
 
-
 #------ Setup toolbar frame and add to main window.
         self.toolbar = tk.Frame(self.root,
                                 bg=Theme.BLACK)
@@ -468,7 +467,7 @@ class View():
         self.footer.place(x=Layout.footer["X"],
                           y=Layout.footer["Y"],
                           width=Layout.footer["WIDTH"],
-                          height=Layout.footer["HEIGHT"])
+                          height=Layout.footer["HEIGHT"]) 
 
     def toggle_active_button(self, button_id):
         # Set active button that matches button ID.
