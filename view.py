@@ -7,6 +7,7 @@ from settings.setup import Layout, Theme
 from enhancements.zbutton import ZButton
 from tools.shapes_tool import ShapeTool
 from tools.draw_tool import Eraser
+from tools.brush_tool import BrushTool
 
 class View():
 
@@ -439,6 +440,7 @@ class View():
         self.shape_tool = ShapeTool(self.canvas)
         self.draw_tool = DrawTool(self.canvas, self.undo_redo, self)
         self.eraser_tool = Eraser(self.canvas)
+        self.brush_tool = BrushTool(self.canvas, self)
 
         # Configure tool buttons
         self.pencil_button.config(command=self.use_pencil)
