@@ -482,7 +482,8 @@ class View():
         elif selection == "Star":
             self.shape_tool.shape = 'star'
 
-        self.shape_tool.shape = selection.lower()
+        self.shape_tool.activate()
+
    
     def select_swatch1(self):
         self.active_color = self.swatch1_color
