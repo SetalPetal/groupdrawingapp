@@ -15,6 +15,12 @@ class ShapeTool:
         self.canvas.bind('<Button-1>', self.button_press)
         self.canvas.bind('<B1-Motion>', self.mouse_drag)
         self.canvas.bind('<ButtonRelease-1>', self.button_release)
+    
+    def activate(self):
+        self.canvas.bind('<Button-1>', self.button_press)
+        self.canvas.bind('<B1-Motion>', self.mouse_drag)
+        self.canvas.bind('<ButtonRelease-1>', self.button_release)
+        print("ShapeTool activated")
 
     def square(self):
         self.shape = 'square'

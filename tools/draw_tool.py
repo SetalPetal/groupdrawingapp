@@ -4,17 +4,17 @@ class DrawTool:
         self.undo_redo = undo_redo
         self.view = view  # Ensures its the view 
 
-    def activate(self):
-        # Re map buttons from previous config
+    def activate(self):        
         self.canvas.unbind("<Button-1>")
         self.canvas.unbind("<B1-Motion>")
         self.canvas.unbind("<ButtonRelease-1>")
-        
+
         # Set up drawing events
         self.canvas.bind("<Button-1>", self.start_draw)
         self.canvas.bind("<B1-Motion>", self.draw)
         self.canvas.bind("<ButtonRelease-1>", self.end_draw)
-        
+        print("Draw tool activate")
+
     def start_draw(self, event):
         self.canvas.old_x = event.x
         self.canvas.old_y = event.y
