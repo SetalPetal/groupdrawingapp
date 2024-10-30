@@ -1,7 +1,6 @@
 from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk, ImageGrab
 from tkinter.messagebox import showinfo # Used for testing
-import os
 
 """
 Class requires pillow module.
@@ -21,7 +20,7 @@ class FileManager:
                            ('Bitmap file', '.bmp'))
         
         # Used to crop canvas when saving drawing
-        self.CROP_OFFSET = 3
+        # self.CROP_OFFSET = 3
 
     
     def save_file(self, window, canvas):
@@ -29,20 +28,25 @@ class FileManager:
         # Set up rectangle dimensions for ImageGrab
         # Update main window to make sure current info is applied when \
         # getting dimensional info.
-        window.update()
+        # window.update()
         # Needing to crop the ImageGrab rectangle by 3 pixels each side, \
         # as was capturing window border.
         # (this was happening on mac OS, not sure if required for Windows).
-        CROP_OFFSET = self.CROP_OFFSET
+        # CROP_OFFSET = self.CROP_OFFSET
         # Set point dimensions for ImageGrab rectangle.
         # x and y = top left point of rectangle.
         # x1 and y1 = bottom right point of rectangle.
-        x = canvas.winfo_rootx() + CROP_OFFSET
-        y = canvas.winfo_rooty() + CROP_OFFSET
-        x1 = x + canvas.winfo_width() - (CROP_OFFSET * 2)
-        y1 = y + canvas.winfo_height() - (CROP_OFFSET * 2)
+        # x = canvas.winfo_rootx() + CROP_OFFSET * 2
+        # y = canvas.winfo_rooty() + CROP_OFFSET * 2
+        # x1 = x + canvas.winfo_width() - (CROP_OFFSET * 2)
+        # y1 = y + canvas.winfo_height() - (CROP_OFFSET * 2)
+        x = canvas.winfo_rootx()
+        y = canvas.winfo_rooty()
+        x1 = x + canvas.winfo_width()
+        y1 = y + canvas.winfo_height()
+
         # Screen grab the image.
-        img = ImageGrab.grab((x, y, x1, y1))
+        img = ImageGrab.grab(bbox=(x,y,x1,y1))
 
         # Get file name with dialog window.
         file_name = filedialog.asksaveasfilename(title="Save Drawing",
@@ -54,9 +58,9 @@ class FileManager:
         if file_name != '':
             # If saving as a jpeg file, convert image to RGB mode.
             # This will allow for the image to be saved as jpeg.
-            if file_name.endswith('jpeg') or file_name.endswith('jpg'):
-                # Convert the image to RBG image.
-                img = img.convert('RGB')
+            # if file_name.endswith('jpeg') or file_name.endswith('jpg'):
+            #     # Convert the image to RBG image.
+            #     img = img.convert('RGB')
             # Save img.
             img.save(file_name)
             # Show message file was saved.
