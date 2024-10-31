@@ -1,18 +1,49 @@
 class UndoRedo:
     def __init__(self):
-        self.undo_stack = []  # Stack for undo actions
-        self.redo_stack = []  # Stack for redo actions
-        self.current_group = []  # Temporary storage for current action group
+        self.undo_stack = []  #stack for undo actions
+        self.redo_stack = []  #stack for redo actions
+        self.current_group = []  #temporary stack for action group
         self.is_recording = False
-    
+
+    #recreate different tool shapes
+    def _recreate_shape(self, canvas, action):
+        if action['type'] == 'line':
+            return canvas.create_line(
+                action['coords'][0], action['coords'][1],
+                action['coords'][2], action['coords'][3],
+                fill=action['fill'],
+                width=action['width']
+            )
+        elif action['type'] == 'oval':
+            return canvas.create_oval(
+                action['coords'][0], action['coords'][1],
+                action['coords'][2], action['coords'][3],
+                fill=action['fill'],
+                outline=action['outline']
+            )
+        elif action['type'] == 'rectangle':
+            return canvas.create_rectangle(
+                action['coords'][0], action['coords'][1],
+                action['coords'][2], action['coords'][3],
+                fill=action['fill'],
+                outline=action['outline']
+            )
+        elif action['type'] == 'polygon':
+            return canvas.create_polygon(
+                action['points'],
+                fill=action['fill'],
+                outline=action['outline']
+            )
+        
+    #start recording actions
     def start_group(self):
-        """Start recording a group of actions"""
         self.is_recording = True
         self.current_group = []
     
+    #end recording actions
     def end_group(self):
         """End recording and save the group"""
-        if self.current_group:  # Only add group if it contains actions
+        if self.current_group:  #only add group if it contains actions
             self.undo_stack.append({
                 'type': 'group',
                 'actions': self.current_group
@@ -22,7 +53,6 @@ class UndoRedo:
         self.is_recording = False
     
     def add_action(self, action):
-        """Add an action, either to current group or as standalone"""
         if self.is_recording:
             self.current_group.append(action)
         else:
@@ -36,12 +66,10 @@ class UndoRedo:
         action = self.undo_stack.pop()
         
         if action['type'] == 'group':
-            # Handle group of actions
             for sub_action in reversed(action['actions']):
                 canvas.delete(sub_action['id'])
             self.redo_stack.append(action)
         else:
-            # Handle single action
             canvas.delete(action['id'])
             self.redo_stack.append(action)
     
@@ -52,42 +80,22 @@ class UndoRedo:
         action = self.redo_stack.pop()
         
         if action['type'] == 'group':
-            # Recreate group of actions
+            #recreate group 
             new_group = []
             for sub_action in action['actions']:
-                new_id = canvas.create_line(
-                    sub_action['coords'][0],
-                    sub_action['coords'][1],
-                    sub_action['coords'][2],
-                    sub_action['coords'][3],
-                    fill=sub_action['fill'],
-                    width=sub_action['width']
-                )
-                new_group.append({
-                    'type': 'line',
-                    'id': new_id,
-                    'coords': sub_action['coords'],
-                    'fill': sub_action['fill'],
-                    'width': sub_action['width']
-                })
+                new_id = self._recreate_shape(canvas, sub_action)
+                new_action = sub_action.copy()
+                new_action['id'] = new_id
+                new_group.append(new_action)
             self.undo_stack.append({
                 'type': 'group',
                 'actions': new_group
             })
         else:
-            # Recreate single action
-            new_id = canvas.create_line(
-                action['coords'][0],
-                action['coords'][1],
-                action['coords'][2],
-                action['coords'][3],
-                fill=action['fill'],
-                width=action['width']
-            )
-            self.undo_stack.append({
-                'type': action['type'],
-                'id': new_id,
-                'coords': action['coords'],
-                'fill': action['fill'],
-                'width': action['width']
-            })
+            #single action
+            new_id = self._recreate_shape(canvas, action)
+            new_action = action.copy()
+            new_action['id'] = new_id
+            self.undo_stack.append(new_action)
+
+    
