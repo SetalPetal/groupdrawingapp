@@ -31,15 +31,6 @@ class Layout():
                                _COLOR_WIDTH + _BRUSH_STYLE_WIDTH +
                                _DRAW_SHAPE_WIDTH + _UNDO_REDO_WIDTH)
     _TOOL_START_X = (_WINDOW_WIDTH - _TOOL_FRAME_TOTAL_WIDTH) / 2
-    
-
-    
-    
-
-    # Define padding for frame components.
-    _LARGE_PADDING = 6
-    _MEDIUM_PADDING = 4
-    _SMALL_PADDING = 2
 
     # Public attributes.
     DEFAULT_BUTTON_SIZE = 35
