@@ -1,6 +1,6 @@
 from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk, ImageGrab
-from tkinter.messagebox import showinfo # Used for testing
+import pyautogui
 
 """
 Class requires pillow module.
@@ -24,20 +24,18 @@ class FileManager:
 
     
     def save_file(self, window, canvas):
-        # Save function may have issues with cropping the screen grab
-        # on windows due to how Windows scales the display.
-        # Further investigation and research into how to better implement the save feature is required.
-        # Save function appears to work correctly on Mac OS.
+        # Save function may had issues with cropping the screen with Image.grab()
+        # This appears to have been fixed by using pyautogui.screenshot()
         
-        # Get coordiantes for main window
+        # get coordinates for canvas top left
         x = canvas.winfo_rootx()
         y = canvas.winfo_rooty()
-        # Get coordinates for canvas.
-        x1 = x + canvas.winfo_width()
-        y1 = y + canvas.winfo_height()
+        # Get coordinates for canvas bottom right.
+        x1 = canvas.winfo_width()
+        y1=canvas.winfo_height()
 
         # Screen grab the image.
-        img = ImageGrab.grab(bbox=(x,y,x1,y1))
+        img = pyautogui.screenshot(region=(x, y, x1, y1))
 
         # Get file name with dialog window.
         file_name = filedialog.asksaveasfilename(title="Save Drawing",
