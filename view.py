@@ -278,7 +278,8 @@ class View():
                                     text="color",
                                     image=self._color_label_bg_img,
                                     compound="center",
-                                    bg=Theme.BLACK)
+                                    bg=Theme.BLACK,
+                                    fg = "black")
         self.color_label.place(x=Layout.color["LABEL_X"],
                                y=Layout.DEFAULT_PADDING,
                                width=Layout.color["FRAME_WIDTH"],
@@ -335,7 +336,8 @@ class View():
                                           text="Brush Style",
                                           image=self.brush_style_label_img,
                                           compound="center",
-                                          bg=Theme.BLACK)
+                                          bg=Theme.BLACK,
+                                          fg = "black")
         self.brush_style_label.place(x=Layout.DEFAULT_PADDING,
                                      y=Layout.DEFAULT_PADDING,
                                      width=Layout.brush_style["LABEL_WIDTH"],
@@ -382,7 +384,8 @@ class View():
                                     text="Draw Shape",
                                     image=self.draw_shape_label_img,
                                     compound="center",
-                                    bg=Theme.BLACK)
+                                    bg=Theme.BLACK,
+                                    fg = "black")
         self.draw_shape_label.place(x=Layout.DEFAULT_PADDING,
                                     y=Layout.DEFAULT_PADDING,
                                width=Layout.draw_shape["LABEL_WIDTH"],
