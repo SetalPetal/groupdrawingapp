@@ -3,10 +3,13 @@ from PIL import Image, ImageTk, ImageGrab
 import pyautogui
 
 """
-Class requires pillow module.
+Class requires pillow module and pyautogui module.
 To install pillow:
 In VS Code, go to 'View' > Terminal
 In the terminal run "pip3 install pillow"
+To install pyautogui :
+In VS Code, go to 'View' > Terminal
+In the terminal run "pip3 install pyautogui"
 
 """
 class FileManager:
@@ -24,7 +27,7 @@ class FileManager:
 
     
     def save_file(self, window, canvas):
-        # Save function may had issues with cropping the screen with Image.grab()
+        # Save function had issues with cropping the screen with Image.grab()
         # This appears to have been fixed by using pyautogui.screenshot()
         
         # get coordinates for canvas top left
