@@ -24,24 +24,15 @@ class FileManager:
 
     
     def save_file(self, window, canvas):
+        # SaveSave function may have issues with cropping the screen grab
+        # on windows due to how Windows scales the display.
+        # Further investigation and research into how to better implement the save feature is required.
+        # Save function appears to work correctly on Mac OS.
         
-        # Set up rectangle dimensions for ImageGrab
-        # Update main window to make sure current info is applied when \
-        # getting dimensional info.
-        # window.update()
-        # Needing to crop the ImageGrab rectangle by 3 pixels each side, \
-        # as was capturing window border.
-        # (this was happening on mac OS, not sure if required for Windows).
-        # CROP_OFFSET = self.CROP_OFFSET
-        # Set point dimensions for ImageGrab rectangle.
-        # x and y = top left point of rectangle.
-        # x1 and y1 = bottom right point of rectangle.
-        # x = canvas.winfo_rootx() + CROP_OFFSET * 2
-        # y = canvas.winfo_rooty() + CROP_OFFSET * 2
-        # x1 = x + canvas.winfo_width() - (CROP_OFFSET * 2)
-        # y1 = y + canvas.winfo_height() - (CROP_OFFSET * 2)
+        # Get coordiantes for main window
         x = canvas.winfo_rootx()
         y = canvas.winfo_rooty()
+        # Get coordinates for canvas.
         x1 = x + canvas.winfo_width()
         y1 = y + canvas.winfo_height()
 
