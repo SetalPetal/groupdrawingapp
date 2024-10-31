@@ -24,7 +24,7 @@ class FileManager:
 
     
     def save_file(self, window, canvas):
-        # SaveSave function may have issues with cropping the screen grab
+        # Save function may have issues with cropping the screen grab
         # on windows due to how Windows scales the display.
         # Further investigation and research into how to better implement the save feature is required.
         # Save function appears to work correctly on Mac OS.
